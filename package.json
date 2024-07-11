@@ -10,6 +10,8 @@
     "@types/node": "^16.18.101",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
+    "eslint": "8.57",
+    "prettier": "^3.2.5",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-scripts": "5.0.1",
@@ -21,7 +23,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "prepare": "husky"
+    "prepare": "husky",
+    "check-formatting": "prettier '**/*.ts' '**/*.tsx' '**/*.scss' --no-error-on-unmatched-pattern --check && eslint --ext .ts,.tsx,.scss"
   },
   "eslintConfig": {
     "extends": [

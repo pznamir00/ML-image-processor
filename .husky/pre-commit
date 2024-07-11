@@ -1,1 +1,2 @@
 npm run test -- --watchAll=false
+npm run check-formatting
