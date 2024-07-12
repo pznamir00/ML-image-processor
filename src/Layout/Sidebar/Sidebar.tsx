@@ -7,23 +7,24 @@ import { Menu } from "antd";
 import Sider from "antd/es/layout/Sider";
 import { ItemType, MenuItemType } from "antd/es/menu/interface";
 import { createElement } from "react";
+import { Link } from "react-router-dom";
 import "./Sidebar.scss";
 
 export default function Sidebar() {
   const sidebarItems: ItemType<MenuItemType>[] = [
     {
       key: "1",
-      label: "Home",
+      label: <Link to="/">Home</Link>,
       icon: createElement(HomeOutlined),
     },
     {
       key: "2",
-      label: "New dataset",
+      label: <Link to="/datasets/add">New dataset</Link>,
       icon: createElement(PlusCircleOutlined),
     },
     {
       key: "3",
-      label: "Datasets",
+      label: <Link to="/datasets">Datasets</Link>,
       icon: createElement(DatabaseOutlined),
     },
   ];

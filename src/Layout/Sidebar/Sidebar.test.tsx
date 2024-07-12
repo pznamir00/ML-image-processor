@@ -1,4 +1,5 @@
 import { render, screen, waitFor } from "@testing-library/react";
+import { BrowserRouter } from "react-router-dom";
 import Sidebar from "./Sidebar";
 
 describe("Sidebar", () => {
@@ -28,6 +29,10 @@ describe("Sidebar", () => {
 });
 
 function setup() {
-  const view = render(<Sidebar />);
+  const view = render(
+    <BrowserRouter>
+      <Sidebar />
+    </BrowserRouter>,
+  );
   return { view };
 }
