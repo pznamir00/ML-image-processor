@@ -1,23 +1,29 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import App from "./App";
 
 describe("App", () => {
-  it("renders header", () => {
+  it("renders header", async () => {
     setup();
-    const header = screen.getByTestId("header");
-    expect(header).toBeInTheDocument();
+    await waitFor(() => {
+      const header = screen.getByTestId("header");
+      expect(header).toBeInTheDocument();
+    });
   });
 
-  it("renders sidebar", () => {
+  it("renders sidebar", async () => {
     setup();
-    const sidebar = screen.getByTestId("sidebar");
-    expect(sidebar).toBeInTheDocument();
+    await waitFor(() => {
+      const sidebar = screen.getByTestId("sidebar");
+      expect(sidebar).toBeInTheDocument();
+    });
   });
 
-  it("renders content", () => {
+  it("renders content", async () => {
     setup();
-    const content = screen.getByTestId("content");
-    expect(content).toBeInTheDocument();
+    await waitFor(() => {
+      const content = screen.getByTestId("content");
+      expect(content).toBeInTheDocument();
+    });
   });
 });
 
