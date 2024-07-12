@@ -10,6 +10,7 @@
     "@types/node": "^16.18.101",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
+    "antd": "^5.19.1",
     "eslint": "8.57",
     "prettier": "^3.2.5",
     "react": "^18.3.1",
@@ -21,7 +22,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --transformIgnorePatterns 'node_modules/(?!my-library-dir)/'",
     "eject": "react-scripts eject",
     "prepare": "husky",
     "check-formatting": "prettier '**/*.ts' '**/*.tsx' '**/*.scss' --no-error-on-unmatched-pattern --check && eslint --ext .ts,.tsx,.scss"

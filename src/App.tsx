@@ -1,26 +1,24 @@
-import React from "react";
-import logo from "./logo.svg";
+import { ConfigProvider, Layout } from "antd";
+import { Content as AntdContent } from "antd/es/layout/layout";
 import "./App.scss";
+import Content from "./Layout/Content/Content";
+import Header from "./Layout/Header/Header";
+import Sidebar from "./Layout/Sidebar/Sidebar";
 
-function App() {
+export default function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ConfigProvider theme={{ cssVar: true }}>
+      <Layout>
+        <Header />
+        <Layout>
+          <Sidebar />
+          <Layout className="app__container">
+            <AntdContent className="app__container__content">
+              <Content />
+            </AntdContent>
+          </Layout>
+        </Layout>
+      </Layout>
+    </ConfigProvider>
   );
 }
-
-export default App;

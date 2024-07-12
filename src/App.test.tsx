@@ -1,9 +1,27 @@
-import React from "react";
 import { render, screen } from "@testing-library/react";
 import App from "./App";
 
-test("renders learn react link", () => {
-  render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+describe("App", () => {
+  it("renders header", () => {
+    setup();
+    const header = screen.getByTestId("header");
+    expect(header).toBeInTheDocument();
+  });
+
+  it("renders sidebar", () => {
+    setup();
+    const sidebar = screen.getByTestId("sidebar");
+    expect(sidebar).toBeInTheDocument();
+  });
+
+  it("renders content", () => {
+    setup();
+    const content = screen.getByTestId("content");
+    expect(content).toBeInTheDocument();
+  });
 });
+
+function setup() {
+  const view = render(<App />);
+  return { view };
+}
