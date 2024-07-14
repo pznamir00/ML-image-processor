@@ -2,7 +2,7 @@ import { ConfigProvider, Layout } from "antd";
 import { Content as AntdContent } from "antd/es/layout/layout";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
-import "./App.scss";
+import styles from "./App.module.scss";
 import Content from "./Content/Content";
 import Header from "./Layout/Header/Header";
 import Sidebar from "./Layout/Sidebar/Sidebar";
@@ -17,8 +17,8 @@ export default function App() {
             <Header />
             <Layout>
               <Sidebar />
-              <Layout className="app__container">
-                <AntdContent className="app__container__content">
+              <Layout className={styles.app__container}>
+                <AntdContent className={styles.app__container__content}>
                   <Content />
                 </AntdContent>
               </Layout>
