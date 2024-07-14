@@ -4,13 +4,14 @@ import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { usePostImageMutation } from "../../../store/images/api";
 import { imagesActions } from "../../../store/images/reducer";
 import { selectImages } from "../../../store/images/selectors";
+import { StepProps } from "../types/step-props.type";
 import { getDistinctFiles } from "../utils/files.utils";
 import { UploadStatus } from "./types/upload-status.type";
 import UploadActions from "./UploadActions/UploadActions";
 import UploadButton from "./UploadButton/UploadButton";
 import UploadResult from "./UploadResult/UploadResult";
 
-export default function Upload() {
+export default function Upload({ goToNextStep }: StepProps) {
   const images = useAppSelector(selectImages);
   const dispatch = useAppDispatch();
   const [postImage] = usePostImageMutation();
@@ -57,7 +58,8 @@ export default function Upload() {
         })
         .catch(() => setStatus({ error: true, progress: 1, uploading: false }));
     }
-  }, [postImage, images]);
+    goToNextStep();
+  }, [postImage, images, goToNextStep]);
 
   return (
     <Fragment>

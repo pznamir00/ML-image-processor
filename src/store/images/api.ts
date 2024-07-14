@@ -6,7 +6,7 @@ export const imagesApi = createApi({
   endpoints: (builder) => ({
     postImage: builder.mutation<{}, { file: File }>({
       query: (data) => ({
-        url: "/upload",
+        url: "/",
         method: "POST",
         body: data,
       }),
