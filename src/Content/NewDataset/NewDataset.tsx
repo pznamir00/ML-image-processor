@@ -8,6 +8,8 @@ import {
 import { Steps } from "antd";
 import { Content } from "antd/es/layout/layout";
 import { Fragment, useCallback, useState } from "react";
+import { selectCurrentDataset } from "../../store/datasets/selectors";
+import { useAppSelector } from "../../store/hooks";
 import Annotate from "./Annotate/Annotate";
 import Preprocessing from "./Augmentation/Augmentation";
 import Export from "./Export/Export";
@@ -17,14 +19,15 @@ import Upload from "./Upload/Upload";
 
 export default function NewDataset() {
   const [step, setStep] = useState(NewDatasetSteps.FORM);
+  const dataset = useAppSelector(selectCurrentDataset);
 
   const goToNextStep = useCallback(() => {
-    //
-  }, []);
+    setStep(step + 1);
+  }, [step]);
 
   return (
     <Fragment>
-      <Steps current={Object.values(NewDatasetSteps).indexOf(step)}>
+      <Steps current={step - 1}>
         <Steps.Step icon={<FormOutlined />} title="Form" />
         <Steps.Step icon={<UploadOutlined />} title="Upload" />
         <Steps.Step icon={<EditOutlined />} title="Annotation" />
@@ -37,13 +40,15 @@ export default function NewDataset() {
             case NewDatasetSteps.FORM:
               return <Form goToNextStep={goToNextStep} />;
             case NewDatasetSteps.UPLOAD:
-              return <Upload goToNextStep={goToNextStep} />;
+              return <Upload goToNextStep={goToNextStep} dataset={dataset} />;
             case NewDatasetSteps.ANNOTATION:
-              return <Annotate goToNextStep={goToNextStep} />;
+              return <Annotate goToNextStep={goToNextStep} dataset={dataset} />;
             case NewDatasetSteps.AUGMENTATION:
-              return <Preprocessing goToNextStep={goToNextStep} />;
+              return (
+                <Preprocessing goToNextStep={goToNextStep} dataset={dataset} />
+              );
             case NewDatasetSteps.EXPORT:
-              return <Export goToNextStep={goToNextStep} />;
+              return <Export goToNextStep={goToNextStep} dataset={dataset} />;
           }
         })()}
       </Content>

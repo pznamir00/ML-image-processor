@@ -4,13 +4,15 @@ import axios from "axios";
 import { Dataset } from "../../types/dataset.type";
 
 export interface DatasetsState {
-  value: Dataset[];
+  datasets: Dataset[];
+  currentDataset: Dataset | null;
   loading: boolean;
   error: string | null;
 }
 
 const initialState: DatasetsState = {
-  value: [],
+  datasets: [],
+  currentDataset: null,
   loading: false,
   error: null,
 };
@@ -30,10 +32,10 @@ export const datasetsSlice = createSlice({
   initialState,
   reducers: {
     addOne: (state, action: PayloadAction<Dataset>) => {
-      state.value.push(action.payload);
+      state.datasets.push(action.payload);
     },
     clear: (state) => {
-      state.value = [];
+      state.datasets = [];
     },
   },
   extraReducers: (builder) =>
@@ -41,16 +43,19 @@ export const datasetsSlice = createSlice({
       .addCase(createDataset.pending, (state) => {
         state.loading = true;
         state.error = null;
+        state.currentDataset = null;
       })
       .addCase(
         createDataset.fulfilled,
         (state, action: PayloadAction<Dataset>) => {
           state.loading = false;
-          state.value.push(action.payload);
+          state.datasets.push(action.payload);
+          state.currentDataset = action.payload;
         },
       )
       .addCase(createDataset.rejected, (state, action) => {
         state.loading = false;
+        state.currentDataset = null;
         state.error = action.error.message || "Error";
       }),
 });

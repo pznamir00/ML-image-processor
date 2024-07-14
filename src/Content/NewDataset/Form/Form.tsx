@@ -2,12 +2,9 @@ import { Form as AntdForm, Button, Card, Input, Radio } from "antd";
 import { useForm } from "antd/es/form/Form";
 import useNotification from "antd/es/notification/useNotification";
 import { useEffect } from "react";
+import { createDataset } from "../../../store/datasets/reducer";
 import {
-  createDataset,
-  datasetsActions,
-} from "../../../store/datasets/reducer";
-import {
-  selectDatasets,
+  selectCurrentDataset,
   selectDatasetsError,
   selectDatasetsLoading,
 } from "../../../store/datasets/selectors";
@@ -17,23 +14,19 @@ import { Dataset } from "../../../types/dataset.type";
 import { StepProps } from "../types/step-props.type";
 import styles from "./Form.module.scss";
 
-export default function Form({ goToNextStep }: StepProps) {
+export default function Form({ goToNextStep }: Omit<StepProps, "dataset">) {
   const [form] = useForm<Omit<Dataset, "images">>();
   const dispatch = useAppDispatch();
   const [notificationApi, notificationHolder] = useNotification();
   const loading = useAppSelector(selectDatasetsLoading);
   const error = useAppSelector(selectDatasetsError);
-  const datasets = useAppSelector(selectDatasets);
+  const dataset = useAppSelector(selectCurrentDataset);
 
   useEffect(() => {
-    dispatch(datasetsActions.clear());
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (datasets.length) {
+    if (dataset) {
       goToNextStep();
     }
-  }, [datasets, goToNextStep]);
+  }, [dataset, goToNextStep]);
 
   useEffect(() => {
     if (error) {
