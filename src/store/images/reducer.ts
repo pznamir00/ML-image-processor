@@ -17,10 +17,10 @@ const initialState: ImagesState = {
 
 export const uploadImage = createAsyncThunk(
   "images/uploadImage",
-  async (image: Image) => {
+  async ({ image, datasetId }: { image: Image; datasetId: number }) => {
     const result = await axios.post<{ image: Image }>(
       "http://localhost:8000/images",
-      { image },
+      { image, datasetId },
     );
     return { ...result.data.image, file: image.file };
   },

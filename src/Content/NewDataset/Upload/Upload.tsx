@@ -18,7 +18,7 @@ import {
   newFileToImage,
 } from "./utils/images.utils";
 
-export default function Upload({ goToNextStep }: StepProps) {
+export default function Upload({ goToNextStep, dataset }: StepProps) {
   const images = useAppSelector(selectImages);
   const dispatch = useAppDispatch();
   const error = useAppSelector(selectImagesError);
@@ -59,11 +59,11 @@ export default function Upload({ goToNextStep }: StepProps) {
     dispatch(imagesActions.setLoading(true));
     for await (const image of images) {
       if (!error) {
-        await dispatch(uploadImage(image));
+        await dispatch(uploadImage({ image, datasetId: dataset!.id }));
       }
     }
     dispatch(imagesActions.setLoading(false));
-  }, [images, dispatch, error]);
+  }, [images, dispatch, error, dataset]);
 
   return (
     <Fragment>

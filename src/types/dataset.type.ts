@@ -2,6 +2,7 @@ import { DatasetTypes } from "./dataset-types.enum";
 import { ClassificationImage, Image, ObjectDetectionImage } from "./image.type";
 
 interface BaseDataset {
+  id: number;
   name: string;
   type: DatasetTypes;
   images: Image[];
