@@ -3,4 +3,9 @@
   width: 100%;
   display: flex;
   justify-content: space-between;
+
+  &__progress {
+    padding: 0.3rem 1rem;
+    width: 50%;
+  }
 }

@@ -1,19 +1,34 @@
-import { Button } from "antd";
+import { Button, Progress } from "antd";
 import { memo } from "react";
-import "./UploadActions.scss";
+import { UploadStatus } from "../types/upload-status.type";
+import styles from "./UploadActions.module.scss";
 
 interface Props {
   onClear: () => void;
   onStart: () => void;
+  status: UploadStatus;
 }
 
-function UploadActions({ onClear, onStart }: Props) {
+function UploadActions({ onClear, onStart, status }: Props) {
   return (
-    <div className="upload_actions">
-      <Button type="text" onClick={onClear}>
+    <div className={styles.upload_actions}>
+      <Button type="text" onClick={onClear} disabled={status?.uploading}>
         Clear
       </Button>
-      <Button type="primary" onClick={onStart}>
+      {(status?.uploading || status?.error) && (
+        <Progress
+          className={styles.upload_actions__progress}
+          percent={status.progress * 100}
+          status={
+            status.error
+              ? "exception"
+              : status.progress === 1
+                ? "success"
+                : "active"
+          }
+        />
+      )}
+      <Button type="primary" onClick={onStart} disabled={status?.uploading}>
         Upload
       </Button>
     </div>
