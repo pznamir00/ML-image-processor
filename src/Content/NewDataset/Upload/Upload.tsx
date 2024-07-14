@@ -1,44 +1,52 @@
 import useNotification from "antd/es/notification/useNotification";
-import { Fragment, useCallback, useEffect, useState } from "react";
+import { Fragment, useCallback, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { usePostImageMutation } from "../../../store/images/api";
-import { imagesActions } from "../../../store/images/reducer";
-import { selectImages } from "../../../store/images/selectors";
+import { imagesActions, uploadImage } from "../../../store/images/reducer";
+import {
+  selectImages,
+  selectImagesError,
+  selectImagesLoading,
+} from "../../../store/images/selectors";
+import { Image } from "../../../types/image.type";
 import { StepProps } from "../types/step-props.type";
-import { getDistinctFiles } from "../utils/files.utils";
-import { UploadStatus } from "./types/upload-status.type";
 import UploadActions from "./UploadActions/UploadActions";
 import UploadButton from "./UploadButton/UploadButton";
 import UploadResult from "./UploadResult/UploadResult";
+import {
+  calculateProgress,
+  getDistinctFiles,
+  newFileToImage,
+} from "./utils/images.utils";
 
 export default function Upload({ goToNextStep }: StepProps) {
   const images = useAppSelector(selectImages);
   const dispatch = useAppDispatch();
-  const [postImage] = usePostImageMutation();
-  const [status, setStatus] = useState<UploadStatus>(null);
+  const error = useAppSelector(selectImagesError);
+  const loading = useAppSelector(selectImagesLoading);
   const [notificationApi, notificationHolder] = useNotification();
 
   useEffect(() => {
-    if (status?.error) {
+    if (error) {
       notificationApi.error({
         message: "Upload Failed",
         placement: "bottomRight",
         duration: 3,
       });
     }
-  }, [status, notificationApi]);
+  }, [error, notificationApi]);
 
   const onFilesAdd = useCallback(
     (fileList: FileList) => {
       const files = Array.from(fileList);
-      const newImages = getDistinctFiles(files, images);
+      let newImages = files.map(newFileToImage);
+      newImages = getDistinctFiles(newImages, images);
       dispatch(imagesActions.set(newImages));
     },
     [dispatch, images],
   );
 
   const onFileDelete = useCallback(
-    (image: File) => dispatch(imagesActions.removeOne(image)),
+    (image: Image) => dispatch(imagesActions.removeOne(image)),
     [dispatch],
   );
 
@@ -48,25 +56,32 @@ export default function Upload({ goToNextStep }: StepProps) {
   );
 
   const onStart = useCallback(async () => {
-    setStatus({ error: false, progress: 0, uploading: true });
-    for await (const [index, image] of Object.entries(images)) {
-      await postImage({ file: image })
-        .unwrap()
-        .then(() => {
-          const progress = (+index + 1) / images.length;
-          setStatus({ error: false, progress, uploading: true });
-        })
-        .catch(() => setStatus({ error: true, progress: 1, uploading: false }));
+    dispatch(imagesActions.setLoading(true));
+    for await (const image of images) {
+      if (!error) {
+        await dispatch(uploadImage(image));
+      }
     }
-    goToNextStep();
-  }, [postImage, images, goToNextStep]);
+    dispatch(imagesActions.setLoading(false));
+  }, [images, dispatch, error]);
 
   return (
     <Fragment>
       {notificationHolder}
       <UploadButton onChange={onFilesAdd} />
-      <UploadResult images={images} status={status} onDelete={onFileDelete} />
-      <UploadActions onClear={onClear} status={status} onStart={onStart} />
+      <UploadResult
+        images={images}
+        uploading={loading}
+        onDelete={onFileDelete}
+      />
+      <UploadActions
+        onClear={onClear}
+        uploading={loading}
+        progress={calculateProgress(images)}
+        error={error}
+        onStart={onStart}
+        onFinish={goToNextStep}
+      />
     </Fragment>
   );
 }

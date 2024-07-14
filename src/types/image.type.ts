@@ -1,14 +1,19 @@
-export interface Image<T> {
+interface BaseImage<T> {
   name: string;
-  url: string;
-  metadata: T;
+  url: string | null;
+  isUploaded: boolean;
+  datasetId: number;
+  metadata?: T;
+  file?: File;
 }
 
-export type ClassificationImage = Image<{
+export type ClassificationImage = BaseImage<{
   class: string;
 }>;
 
-export type ObjectDetectionImage = Image<{
+export type ObjectDetectionImage = BaseImage<{
   min: { x: number; y: number };
   max: { x: number; y: number };
 }>;
+
+export type Image = ClassificationImage | ObjectDetectionImage;

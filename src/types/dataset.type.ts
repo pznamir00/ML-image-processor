@@ -4,7 +4,7 @@ import { ClassificationImage, Image, ObjectDetectionImage } from "./image.type";
 interface BaseDataset {
   name: string;
   type: DatasetTypes;
-  images: Image<unknown>[];
+  images: Image[];
 }
 
 export interface ClassificationDataset extends BaseDataset {

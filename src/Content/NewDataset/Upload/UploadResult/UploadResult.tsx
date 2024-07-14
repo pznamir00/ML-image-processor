@@ -1,40 +1,40 @@
 import { DeleteOutlined } from "@ant-design/icons";
-import { Button, Image } from "antd";
+import { Image as AntdImage, Button } from "antd";
 import { useRef } from "react";
 import useRefWidth from "../../../../hooks/useRefWidth/useRefWidth";
-import { UploadStatus } from "../types/upload-status.type";
+import { Image } from "../../../../types/image.type";
 import styles from "./UploadResult.module.scss";
 
 interface Props {
-  images: File[];
-  onDelete: (image: File) => void;
-  status: UploadStatus;
+  images: Image[];
+  onDelete: (image: Image) => void;
+  uploading: boolean;
 }
 
-export default function UploadResult({ images, onDelete, status }: Props) {
+export default function UploadResult({ images, onDelete, uploading }: Props) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const containerWidth = useRefWidth(containerRef);
 
   return (
     <div className={styles.upload_result} ref={containerRef}>
-      <Image.PreviewGroup>
+      <AntdImage.PreviewGroup>
         {images.map((image, key) => (
           <div key={key} className={styles.upload_result__item}>
-            <Image
+            <AntdImage
               width={containerWidth / 5}
-              src={URL.createObjectURL(image)}
+              src={URL.createObjectURL(image.file as File)}
             />
             <Button
               className={styles.upload_result__item__remove}
-              disabled={status?.uploading}
+              disabled={uploading}
               size="small"
-              onClick={status?.uploading ? undefined : () => onDelete(image)}
+              onClick={uploading ? undefined : () => onDelete(image)}
             >
               <DeleteOutlined />
             </Button>
           </div>
         ))}
-      </Image.PreviewGroup>
+      </AntdImage.PreviewGroup>
     </div>
   );
 }

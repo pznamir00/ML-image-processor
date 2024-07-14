@@ -14,6 +14,7 @@ import Annotate from "./Annotate/Annotate";
 import Preprocessing from "./Augmentation/Augmentation";
 import Export from "./Export/Export";
 import Form from "./Form/Form";
+import styles from "./NewDataset.module.scss";
 import { NewDatasetSteps } from "./types/new-dataset-steps.enum";
 import Upload from "./Upload/Upload";
 
@@ -34,7 +35,7 @@ export default function NewDataset() {
         <Steps.Step icon={<CalculatorOutlined />} title="Augmentation" />
         <Steps.Step icon={<ExportOutlined />} title="Export" />
       </Steps>
-      <Content>
+      <Content className={styles.new_dataset__content}>
         {(() => {
           switch (step) {
             case NewDatasetSteps.FORM:

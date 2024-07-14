@@ -1,36 +1,57 @@
 import { Button, Progress } from "antd";
 import { memo } from "react";
-import { UploadStatus } from "../types/upload-status.type";
 import styles from "./UploadActions.module.scss";
 
 interface Props {
   onClear: () => void;
   onStart: () => void;
-  status: UploadStatus;
+  onFinish: () => void;
+  progress: number;
+  uploading: boolean;
+  error: string | null;
 }
 
-function UploadActions({ onClear, onStart, status }: Props) {
+function UploadActions({
+  onClear,
+  onStart,
+  onFinish,
+  progress,
+  uploading,
+  error,
+}: Props) {
+  const uploadedSuccessfully = progress === 1;
+
   return (
     <div className={styles.upload_actions}>
-      <Button type="text" onClick={onClear} disabled={status?.uploading}>
+      <Button type="text" onClick={onClear} disabled={uploading}>
         Clear
       </Button>
-      {(status?.uploading || status?.error) && (
+      {(uploading || error || uploadedSuccessfully) && (
         <Progress
           className={styles.upload_actions__progress}
-          percent={status.progress * 100}
+          percent={progress * 100}
           status={
-            status.error
-              ? "exception"
-              : status.progress === 1
-                ? "success"
-                : "active"
+            error ? "exception" : uploadedSuccessfully ? "success" : "active"
           }
         />
       )}
-      <Button type="primary" onClick={onStart} disabled={status?.uploading}>
-        Upload
-      </Button>
+      <div>
+        <Button
+          type="primary"
+          onClick={onStart}
+          disabled={uploading || uploadedSuccessfully}
+        >
+          Upload
+        </Button>
+        <Button
+          type="primary"
+          className={styles.upload_actions__finish_btn}
+          onClick={onFinish}
+          disabled={!!(!uploadedSuccessfully || error)}
+        >
+          Finish
+        </Button>
+      </div>
     </div>
   );
 }
