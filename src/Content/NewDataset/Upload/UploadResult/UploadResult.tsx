@@ -1,7 +1,7 @@
 import { DeleteOutlined } from "@ant-design/icons";
 import { Button, Image } from "antd";
 import { useRef } from "react";
-import useRefWidth from "../../../hooks/useRefWidth/useRefWidth";
+import useRefWidth from "../../../../hooks/useRefWidth/useRefWidth";
 import { UploadStatus } from "../types/upload-status.type";
 import styles from "./UploadResult.module.scss";
 
