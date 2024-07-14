@@ -3,7 +3,6 @@ import { Fragment, useCallback, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { imagesActions, uploadImage } from "../../../store/images/reducer";
 import {
-  selectImages,
   selectImagesError,
   selectImagesLoading,
 } from "../../../store/images/selectors";
@@ -18,8 +17,7 @@ import {
   newFileToImage,
 } from "./utils/images.utils";
 
-export default function Upload({ goToNextStep, dataset }: StepProps) {
-  const images = useAppSelector(selectImages);
+export default function Upload({ goToNextStep, dataset, images }: StepProps) {
   const dispatch = useAppDispatch();
   const error = useAppSelector(selectImagesError);
   const loading = useAppSelector(selectImagesLoading);

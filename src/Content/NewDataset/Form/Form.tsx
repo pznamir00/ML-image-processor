@@ -14,7 +14,9 @@ import { Dataset } from "../../../types/dataset.type";
 import { StepProps } from "../types/step-props.type";
 import styles from "./Form.module.scss";
 
-export default function Form({ goToNextStep }: Omit<StepProps, "dataset">) {
+export default function Form({
+  goToNextStep,
+}: Omit<StepProps, "dataset" | "images">) {
   const [form] = useForm<Omit<Dataset, "images">>();
   const dispatch = useAppDispatch();
   const [notificationApi, notificationHolder] = useNotification();

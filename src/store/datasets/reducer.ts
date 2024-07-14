@@ -36,6 +36,7 @@ export const datasetsSlice = createSlice({
     },
     clear: (state) => {
       state.datasets = [];
+      state.currentDataset = null;
     },
   },
   extraReducers: (builder) =>
