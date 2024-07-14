@@ -1,0 +1,21 @@
+.upload_result {
+  margin-top: 2rem;
+  text-align: center;
+  background-color: var(--ant-layout-color-bg-body);
+  border-radius: 0.5rem;
+  height: calc(100% - 12rem);
+  padding: 1rem;
+
+  &__item {
+    display: inline;
+
+    &__remove {
+      width: 1rem;
+      aspect-ratio: 1;
+      background-color: var(--ant-color-error) !important;
+      border-color: transparent !important;
+      position: absolute;
+      margin-left: -1.9rem;
+    }
+  }
+}
