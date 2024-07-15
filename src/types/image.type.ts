@@ -7,13 +7,21 @@ interface BaseImage<T> {
   file?: File;
 }
 
-export type ClassificationImage = BaseImage<{
+export interface ClassificationImageMetadata {
   class: string;
-}>;
+}
 
-export type ObjectDetectionImage = BaseImage<{
+export interface ObjectDetectionImageMetadata {
   min: { x: number; y: number };
   max: { x: number; y: number };
-}>;
+}
+
+export type Metadata =
+  | ClassificationImageMetadata
+  | ObjectDetectionImageMetadata;
+
+export type ClassificationImage = BaseImage<ClassificationImageMetadata>;
+
+export type ObjectDetectionImage = BaseImage<ObjectDetectionImageMetadata>;
 
 export type Image = ClassificationImage | ObjectDetectionImage;

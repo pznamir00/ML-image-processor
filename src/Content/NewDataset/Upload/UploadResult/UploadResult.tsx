@@ -22,6 +22,7 @@ export default function UploadResult({ images, onDelete, uploading }: Props) {
           <div key={key} className={styles.upload_result__item}>
             <AntdImage
               width={containerWidth / 5}
+              height={containerWidth / 5}
               src={URL.createObjectURL(image.file as File)}
             />
             <Button

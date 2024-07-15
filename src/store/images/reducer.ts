@@ -1,7 +1,7 @@
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { Image } from "../../types/image.type";
+import { Image, Metadata } from "../../types/image.type";
 
 export interface ImagesState {
   images: Image[];
@@ -41,6 +41,17 @@ export const imagesSlice = createSlice({
     },
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.loading = action.payload;
+    },
+    setMetadata: (
+      state,
+      action: PayloadAction<{
+        image: Image;
+        metadata: Metadata | null;
+      }>,
+    ) => {
+      const { image, metadata } = action.payload;
+      const index = state.images.findIndex((i) => i.name === image.name);
+      state.images[index].metadata = metadata || undefined;
     },
   },
   extraReducers: (builder) =>

@@ -1,7 +1,6 @@
 .annotation {
   text-align: center;
   margin: auto;
-  width: 45%;
 
   &__stats {
     padding: 0 1rem;
@@ -12,5 +11,9 @@
     &__progress {
       width: 70%;
     }
+  }
+
+  &__image {
+    filter: brightness(50%);
   }
 }

@@ -13,7 +13,7 @@ export default function UploadButton({
       handleChange={onChange}
       name="file"
       multiple
-      types={["PNG", "JPG", "GIF"]}
+      types={["PNG", "JPG", "GIF", "JPEG"]}
     >
       <Button className={styles.upload_button} type="dashed">
         <PlusOutlined className={styles.upload_button__icon} />
