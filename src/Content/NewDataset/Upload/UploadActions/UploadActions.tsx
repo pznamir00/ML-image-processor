@@ -49,7 +49,7 @@ function UploadActions({
           onClick={onFinish}
           disabled={!!(!uploadedSuccessfully || error)}
         >
-          Finish
+          Next
         </Button>
       </div>
     </div>

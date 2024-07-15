@@ -93,7 +93,7 @@ export default function Form({
 
         <AntdForm.Item className={styles.form__submit_btn}>
           <Button type="primary" htmlType="submit">
-            Submit
+            Next
           </Button>
         </AntdForm.Item>
       </AntdForm>
