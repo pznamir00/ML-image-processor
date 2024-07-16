@@ -26,6 +26,13 @@ export const uploadImage = createAsyncThunk(
   },
 );
 
+export const updateBatchImages = createAsyncThunk(
+  "images/updateBatchImages",
+  async ({ images }: { images: Image[] }) => {
+    return await axios.put("http://localhost:8000/images/batch", { images });
+  },
+);
+
 export const imagesSlice = createSlice({
   name: "images",
   initialState,
@@ -65,6 +72,17 @@ export const imagesSlice = createSlice({
         state.images[index] = image;
       })
       .addCase(uploadImage.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || "Error";
+      })
+      .addCase(updateBatchImages.pending, (state) => {
+        state.error = null;
+        state.loading = true;
+      })
+      .addCase(updateBatchImages.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(updateBatchImages.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || "Error";
       }),

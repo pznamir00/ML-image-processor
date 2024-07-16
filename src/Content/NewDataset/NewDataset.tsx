@@ -14,7 +14,7 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { imagesActions } from "../../store/images/reducer";
 import { selectImages } from "../../store/images/selectors";
 import Annotate from "./Annotation/Annotation";
-import Preprocessing from "./Augmentation/Augmentation";
+import Augmentation from "./Augmentation/Augmentation";
 import Export from "./Export/Export";
 import Form from "./Form/Form";
 import styles from "./NewDataset.module.scss";
@@ -88,7 +88,7 @@ export default function NewDataset() {
                 );
               case NewDatasetSteps.AUGMENTATION:
                 return (
-                  <Preprocessing
+                  <Augmentation
                     goToNextStep={goToNextStep}
                     dataset={dataset}
                     images={images}

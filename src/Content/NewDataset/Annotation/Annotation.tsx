@@ -1,8 +1,16 @@
 import { ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons";
-import { Button, Card, Modal, Progress } from "antd";
-import { useCallback, useMemo, useState } from "react";
-import { useAppDispatch } from "../../../store/hooks";
-import { imagesActions } from "../../../store/images/reducer";
+import { Button, Card, Modal, Progress, Spin } from "antd";
+import useNotification from "antd/es/notification/useNotification";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import {
+  imagesActions,
+  updateBatchImages,
+} from "../../../store/images/reducer";
+import {
+  selectImagesError,
+  selectImagesLoading,
+} from "../../../store/images/selectors";
 import { DatasetTypes } from "../../../types/dataset-types.enum";
 import {
   ClassificationImage,
@@ -21,23 +29,26 @@ export default function Annotation({
 }: StepProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isConfirmationBoxOpen, setIsConfirmationBoxOpen] = useState(false);
+  const [notificationApi, notificationHolder] = useNotification();
   const dispatch = useAppDispatch();
-  const isLastPhoto = currentImageIndex + 1 === images.length;
-
+  const loading = useAppSelector(selectImagesLoading);
+  const error = useAppSelector(selectImagesError);
   const image = useMemo(
     () => images[currentImageIndex],
     [currentImageIndex, images],
   );
 
-  const onNextItem = () => {
-    if (isLastPhoto) {
-      setIsConfirmationBoxOpen(true);
-    } else {
-      setCurrentImageIndex(currentImageIndex + 1);
+  useEffect(() => {
+    if (error) {
+      notificationApi.error({
+        message: "Failed to save annotations",
+        placement: "bottomRight",
+        duration: 3,
+      });
     }
-  };
+  }, [error, notificationApi]);
 
-  const onPreviousItem = () => setCurrentImageIndex(currentImageIndex - 1);
+  const isLastPhoto = currentImageIndex + 1 === images.length;
 
   const setMetadata = useCallback(
     (metadata: Metadata | undefined) => {
@@ -50,6 +61,20 @@ export default function Annotation({
     },
     [dispatch, image],
   );
+
+  const onNextItem = () => {
+    if (isLastPhoto) {
+      setIsConfirmationBoxOpen(true);
+    } else {
+      setCurrentImageIndex(currentImageIndex + 1);
+    }
+  };
+
+  const onPreviousItem = () => setCurrentImageIndex(currentImageIndex - 1);
+
+  const onFinish = () => {
+    dispatch(updateBatchImages({ images })).then(goToNextStep);
+  };
 
   return (
     <Card
@@ -72,10 +97,19 @@ export default function Annotation({
           />
         </div>,
         <Button type="text" onClick={onNextItem} disabled={!image.metadata}>
-          {isLastPhoto ? <span>Next</span> : <ArrowRightOutlined />}
+          {isLastPhoto ? (
+            loading ? (
+              <Spin />
+            ) : (
+              <span>Next</span>
+            )
+          ) : (
+            <ArrowRightOutlined />
+          )}
         </Button>,
       ]}
     >
+      {notificationHolder}
       {dataset.type === DatasetTypes.CLASSIFICATION ? (
         <ClassificationLayer
           currentImage={image as ClassificationImage}
@@ -92,7 +126,7 @@ export default function Annotation({
       <Modal
         title="Are you sure you want to finish annotating?"
         open={isConfirmationBoxOpen}
-        onOk={goToNextStep}
+        onOk={onFinish}
         onCancel={() => setIsConfirmationBoxOpen(false)}
       ></Modal>
     </Card>
