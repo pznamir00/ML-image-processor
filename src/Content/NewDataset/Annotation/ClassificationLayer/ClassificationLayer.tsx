@@ -1,5 +1,5 @@
 import useDebounce from "@custom-react-hooks/use-debounce";
-import { AutoComplete, Card, Form } from "antd";
+import { AutoComplete, Card, Form, Image } from "antd";
 import { memo, useEffect, useState } from "react";
 import useDistinctClasses from "../../../../hooks/useDistinctClasses/useDistinctClasses";
 import { ClassificationImage } from "../../../../types/image.type";
@@ -31,7 +31,12 @@ function ClassificationLayer({
 
   return (
     <Card className={styles.classification_layer}>
-      <Form>
+      <Image
+        src={URL.createObjectURL(currentImage.file as File)}
+        width={300}
+        height={300}
+      />
+      <Form className={styles.classification_layer__form}>
         <Form.Item label="Class">
           <AutoComplete
             value={_class}

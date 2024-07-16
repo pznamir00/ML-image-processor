@@ -1,5 +1,5 @@
 import { ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons";
-import { Button, Card, Progress } from "antd";
+import { Button, Card, Modal, Progress } from "antd";
 import { useCallback, useMemo, useState } from "react";
 import { useAppDispatch } from "../../../store/hooks";
 import { imagesActions } from "../../../store/images/reducer";
@@ -20,16 +20,24 @@ export default function Annotation({
   goToNextStep,
 }: StepProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isConfirmationBoxOpen, setIsConfirmationBoxOpen] = useState(false);
   const dispatch = useAppDispatch();
+  const isLastPhoto = currentImageIndex + 1 === images.length;
 
   const image = useMemo(
     () => images[currentImageIndex],
     [currentImageIndex, images],
   );
 
-  const onNextPhoto = () => setCurrentImageIndex(currentImageIndex + 1);
+  const onNextItem = () => {
+    if (isLastPhoto) {
+      setIsConfirmationBoxOpen(true);
+    } else {
+      setCurrentImageIndex(currentImageIndex + 1);
+    }
+  };
 
-  const onPreviousPhoto = () => setCurrentImageIndex(currentImageIndex - 1);
+  const onPreviousItem = () => setCurrentImageIndex(currentImageIndex - 1);
 
   const setMetadata = useCallback(
     (metadata: Metadata | undefined) => {
@@ -49,7 +57,7 @@ export default function Annotation({
       actions={[
         <Button
           type="text"
-          onClick={onPreviousPhoto}
+          onClick={onPreviousItem}
           disabled={currentImageIndex === 0}
         >
           <ArrowLeftOutlined />
@@ -63,12 +71,8 @@ export default function Annotation({
             className={styles.annotation__stats__progress}
           />
         </div>,
-        <Button
-          type="text"
-          onClick={onNextPhoto}
-          disabled={currentImageIndex + 1 === images.length || !image.metadata}
-        >
-          <ArrowRightOutlined />
+        <Button type="text" onClick={onNextItem} disabled={!image.metadata}>
+          {isLastPhoto ? <span>Next</span> : <ArrowRightOutlined />}
         </Button>,
       ]}
     >
@@ -85,13 +89,12 @@ export default function Annotation({
           setMetadata={setMetadata}
         />
       )}
-      {/* <Image
-        preview={false}
-        width={450}
-        height={450}
-        className={styles.annotation__image}
-        src={URL.createObjectURL(images[currentImageIndex].file as File)}
-      /> */}
+      <Modal
+        title="Are you sure you want to finish annotating?"
+        open={isConfirmationBoxOpen}
+        onOk={goToNextStep}
+        onCancel={() => setIsConfirmationBoxOpen(false)}
+      ></Modal>
     </Card>
   );
 }
