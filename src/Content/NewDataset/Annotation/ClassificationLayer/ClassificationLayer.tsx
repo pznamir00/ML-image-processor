@@ -1,26 +1,22 @@
 import useDebounce from "@custom-react-hooks/use-debounce";
 import { AutoComplete, Card, Form } from "antd";
 import { memo, useEffect, useState } from "react";
-import {
-  ClassificationImage,
-  ClassificationImageMetadata,
-} from "../../../../types/image.type";
-import styles from "./ClassificationBox.module.scss";
-import useDistinctClasses from "./hooks/useDistinctClasses/useDistinctClasses";
+import useDistinctClasses from "../../../../hooks/useDistinctClasses/useDistinctClasses";
+import { ClassificationImage } from "../../../../types/image.type";
+import { LayerProps } from "../types/layer-props.type";
+import styles from "./ClassificationLayer.module.scss";
 
-function ClassificationBox({
+function ClassificationLayer({
   currentImage,
   images,
   setMetadata,
-}: {
-  currentImage: ClassificationImage;
-  images: ClassificationImage[];
-  setMetadata: (metadata: ClassificationImageMetadata | null) => void;
-}) {
+}: LayerProps<ClassificationImage>) {
   const [_class, setClass] = useState(currentImage.metadata?.class || "");
-  const allClasses = useDistinctClasses(images);
+  const allClasses = useDistinctClasses(images, (img) => [
+    img.metadata?.class || "",
+  ]);
   const [updateMetadata] = useDebounce(
-    (val: string) => setMetadata(val ? { class: val } : null),
+    (val: string) => setMetadata(val ? { class: val } : undefined),
     1000,
   );
 
@@ -34,7 +30,7 @@ function ClassificationBox({
   };
 
   return (
-    <Card className={styles.classification_box}>
+    <Card className={styles.classification_layer}>
       <Form>
         <Form.Item label="Class">
           <AutoComplete
@@ -50,4 +46,4 @@ function ClassificationBox({
   );
 }
 
-export default memo(ClassificationBox);
+export default memo(ClassificationLayer);

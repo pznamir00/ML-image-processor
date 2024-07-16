@@ -1,13 +1,18 @@
 import { ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons";
-import { Button, Card, Image, Progress } from "antd";
+import { Button, Card, Progress } from "antd";
 import { useCallback, useMemo, useState } from "react";
 import { useAppDispatch } from "../../../store/hooks";
 import { imagesActions } from "../../../store/images/reducer";
 import { DatasetTypes } from "../../../types/dataset-types.enum";
-import { ClassificationImage, Metadata } from "../../../types/image.type";
+import {
+  ClassificationImage,
+  Metadata,
+  ObjectDetectionImage,
+} from "../../../types/image.type";
 import { StepProps } from "../types/step-props.type";
 import styles from "./Annotation.module.scss";
-import ClassificationBox from "./ClassificationBox/ClassificationBox";
+import ClassificationLayer from "./ClassificationLayer/ClassificationLayer";
+import ObjectDetectionLayer from "./ObjectDetectionLayer/ObjectDetectionLayer";
 
 export default function Annotation({
   dataset,
@@ -27,8 +32,13 @@ export default function Annotation({
   const onPreviousPhoto = () => setCurrentImageIndex(currentImageIndex - 1);
 
   const setMetadata = useCallback(
-    (metadata: Metadata | null) => {
-      dispatch(imagesActions.setMetadata({ image, metadata }));
+    (metadata: Metadata | undefined) => {
+      dispatch(
+        imagesActions.setMetadata({
+          image,
+          metadata: metadata || null,
+        }),
+      );
     },
     [dispatch, image],
   );
@@ -62,20 +72,26 @@ export default function Annotation({
         </Button>,
       ]}
     >
-      {dataset.type === DatasetTypes.CLASSIFICATION && (
-        <ClassificationBox
+      {dataset.type === DatasetTypes.CLASSIFICATION ? (
+        <ClassificationLayer
           currentImage={image as ClassificationImage}
           images={images as ClassificationImage[]}
           setMetadata={setMetadata}
         />
+      ) : (
+        <ObjectDetectionLayer
+          currentImage={image as ObjectDetectionImage}
+          images={images as ObjectDetectionImage[]}
+          setMetadata={setMetadata}
+        />
       )}
-      <Image
+      {/* <Image
         preview={false}
         width={450}
         height={450}
         className={styles.annotation__image}
         src={URL.createObjectURL(images[currentImageIndex].file as File)}
-      />
+      /> */}
     </Card>
   );
 }

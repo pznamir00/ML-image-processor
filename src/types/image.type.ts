@@ -7,13 +7,18 @@ interface BaseImage<T> {
   file?: File;
 }
 
+export interface MetadataAnnotation {
+  min: { x: number; y: number };
+  max: { x: number; y: number };
+  class: string;
+}
+
 export interface ClassificationImageMetadata {
   class: string;
 }
 
 export interface ObjectDetectionImageMetadata {
-  min: { x: number; y: number };
-  max: { x: number; y: number };
+  annotations: MetadataAnnotation[];
 }
 
 export type Metadata =
