@@ -22,6 +22,16 @@ const initialState: DatasetsState = {
   error: null,
 };
 
+export const getDatasets = createAsyncThunk(
+  "datasets/getDatasets",
+  async () => {
+    const response = await axios.get<Dataset[]>(
+      "http://localhost:8000/datasets",
+    );
+    return response.data;
+  },
+);
+
 export const createDataset = createAsyncThunk(
   "datasets/createDataset",
   async (dataset: Dataset) => {
@@ -38,6 +48,17 @@ export const updateDataset = createAsyncThunk(
     await axios.put<{ dataset: Dataset }>("http://localhost:8000/datasets", {
       dataset,
     });
+    return dataset;
+  },
+);
+
+export const exportDataset = createAsyncThunk(
+  "datasets/exportDataset",
+  async (dataset: Dataset) => {
+    await axios.post<{ dataset: Dataset }>(
+      "http://localhost:8000/datasets/export",
+      { dataset },
+    );
     return dataset;
   },
 );
@@ -93,6 +114,32 @@ export const datasetsSlice = createSlice({
         },
       )
       .addCase(updateDataset.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || "Error";
+      })
+      .addCase(getDatasets.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(
+        getDatasets.fulfilled,
+        (state, action: PayloadAction<Dataset[]>) => {
+          state.loading = false;
+          state.datasets = action.payload;
+        },
+      )
+      .addCase(getDatasets.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || "Error";
+      })
+      .addCase(exportDataset.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(exportDataset.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(exportDataset.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || "Error";
       }),
