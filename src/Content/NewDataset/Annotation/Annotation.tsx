@@ -1,7 +1,7 @@
 import { ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons";
 import { Button, Card, Modal, Progress, Spin } from "antd";
-import useNotification from "antd/es/notification/useNotification";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
+import useToastOnError from "../../../hooks/useToastOnError/useToastOnError";
 import { datasetsActions } from "../../../store/datasets/reducer";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import {
@@ -30,24 +30,14 @@ export default function Annotation({
 }: StepProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isConfirmationBoxOpen, setIsConfirmationBoxOpen] = useState(false);
-  const [notificationApi, notificationHolder] = useNotification();
   const dispatch = useAppDispatch();
   const loading = useAppSelector(selectImagesLoading);
-  const error = useAppSelector(selectImagesError);
+  const err = useAppSelector(selectImagesError);
+  const notificationHolder = useToastOnError(err, "Failed to save annotations");
   const image = useMemo(
     () => images[currentImageIndex],
     [currentImageIndex, images],
   );
-
-  useEffect(() => {
-    if (error) {
-      notificationApi.error({
-        message: "Failed to save annotations",
-        placement: "bottomRight",
-        duration: 3,
-      });
-    }
-  }, [error, notificationApi]);
 
   const isLastPhoto = currentImageIndex + 1 === images.length;
 

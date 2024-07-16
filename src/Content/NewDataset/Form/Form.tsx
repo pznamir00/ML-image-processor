@@ -1,7 +1,7 @@
 import { Form as AntdForm, Button, Card, Input, Radio } from "antd";
 import { useForm } from "antd/es/form/Form";
-import useNotification from "antd/es/notification/useNotification";
 import { useEffect } from "react";
+import useToastOnError from "../../../hooks/useToastOnError/useToastOnError";
 import { createDataset } from "../../../store/datasets/reducer";
 import {
   selectCurrentDataset,
@@ -19,26 +19,16 @@ export default function Form({
 }: Omit<StepProps, "dataset" | "images">) {
   const [form] = useForm<Omit<Dataset, "images">>();
   const dispatch = useAppDispatch();
-  const [notificationApi, notificationHolder] = useNotification();
   const loading = useAppSelector(selectDatasetsLoading);
-  const error = useAppSelector(selectDatasetsError);
+  const err = useAppSelector(selectDatasetsError);
   const dataset = useAppSelector(selectCurrentDataset);
+  const notifHolder = useToastOnError(err, "Failed to create the dataset");
 
   useEffect(() => {
     if (dataset) {
       goToNextStep();
     }
   }, [dataset, goToNextStep]);
-
-  useEffect(() => {
-    if (error) {
-      notificationApi.error({
-        message: "Failed to create the dataset",
-        placement: "bottomRight",
-        duration: 3,
-      });
-    }
-  }, [error, notificationApi]);
 
   const submit = async () => {
     dispatch(
@@ -51,7 +41,7 @@ export default function Form({
 
   return (
     <Card title="Add New Dataset" className={styles.form} loading={loading}>
-      {notificationHolder}
+      {notifHolder}
       <AntdForm
         form={form}
         labelCol={{ span: 2 }}

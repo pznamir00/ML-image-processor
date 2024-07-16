@@ -1,6 +1,6 @@
 import { Button, Spin, Table } from "antd";
-import useNotification from "antd/es/notification/useNotification";
 import { useEffect } from "react";
+import useToastOnError from "../../hooks/useToastOnError/useToastOnError";
 import { exportDataset, getDatasets } from "../../store/datasets/reducer";
 import {
   selectDatasets,
@@ -16,21 +16,11 @@ export default function Datasets() {
   const datasets = useAppSelector(selectDatasets);
   const loading = useAppSelector(selectDatasetsLoading);
   const error = useAppSelector(selectDatasetsError);
-  const [notificationApi, notificationHolder] = useNotification();
+  const notificationHolder = useToastOnError(error, "Failed to load datasets");
 
   useEffect(() => {
     dispatch(getDatasets());
   }, [dispatch]);
-
-  useEffect(() => {
-    if (error) {
-      notificationApi.error({
-        message: "Failed to load datasets",
-        placement: "bottomRight",
-        duration: 3,
-      });
-    }
-  }, [error, notificationApi]);
 
   const onExport = (dataset: Dataset) => {
     dispatch(exportDataset(dataset));

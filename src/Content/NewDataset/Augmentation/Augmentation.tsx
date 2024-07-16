@@ -1,9 +1,9 @@
 import { Button, Flex, Modal, Slider, Spin, Tooltip } from "antd";
 import Card from "antd/es/card/Card";
 import { Content } from "antd/es/layout/layout";
-import useNotification from "antd/es/notification/useNotification";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import useDatasetAllClassesExtractor from "../../../hooks/useDatasetAllClassesExtractor/useDatasetAllClassesExtractor";
+import useToastOnError from "../../../hooks/useToastOnError/useToastOnError";
 import { updateDataset } from "../../../store/datasets/reducer";
 import {
   selectDatasetsError,
@@ -29,21 +29,11 @@ export default function Augmentation({
   const [algorithm, setAlgorithm] = useState<Algorithms | null>(null);
   const [range, setRange] = useState<[number, number]>([0, 25]);
   const [augmentations, setAugmentations] = useState<IAugmentation[]>([]);
-  const [notificationApi, notificationHolder] = useNotification();
   const dispatch = useAppDispatch();
   const loading = useAppSelector(selectDatasetsLoading);
-  const error = useAppSelector(selectDatasetsError);
+  const err = useAppSelector(selectDatasetsError);
   const allClassesNum = useDatasetAllClassesExtractor(dataset);
-
-  useEffect(() => {
-    if (error) {
-      notificationApi.error({
-        message: "Failed to save annotations",
-        placement: "bottomRight",
-        duration: 3,
-      });
-    }
-  }, [error, notificationApi]);
+  const notificationHolder = useToastOnError(err, "Failed to save annotations");
 
   const onImageClick = useCallback(
     (alg: Algorithms) => setAlgorithm(alg === algorithm ? null : alg),

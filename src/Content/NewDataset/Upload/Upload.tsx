@@ -1,5 +1,5 @@
-import useNotification from "antd/es/notification/useNotification";
-import { Fragment, useCallback, useEffect } from "react";
+import { Fragment, useCallback } from "react";
+import useToastOnError from "../../../hooks/useToastOnError/useToastOnError";
 import { datasetsActions } from "../../../store/datasets/reducer";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { imagesActions, uploadImage } from "../../../store/images/reducer";
@@ -22,17 +22,7 @@ export default function Upload({ goToNextStep, dataset, images }: StepProps) {
   const dispatch = useAppDispatch();
   const error = useAppSelector(selectImagesError);
   const loading = useAppSelector(selectImagesLoading);
-  const [notificationApi, notificationHolder] = useNotification();
-
-  useEffect(() => {
-    if (error) {
-      notificationApi.error({
-        message: "Upload Failed",
-        placement: "bottomRight",
-        duration: 3,
-      });
-    }
-  }, [error, notificationApi]);
+  const notificationHolder = useToastOnError(error, "Upload Failed");
 
   const onFilesAdd = useCallback(
     (fileList: FileList) => {
