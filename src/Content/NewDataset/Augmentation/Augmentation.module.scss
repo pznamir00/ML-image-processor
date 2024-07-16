@@ -1,0 +1,32 @@
+.augmentation {
+  &__header {
+    display: flex;
+    justify-content: space-between;
+
+    & span:last-child {
+      color: var(--ant-blue-3);
+    }
+  }
+
+  &__body {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__column {
+    width: 50%;
+  }
+
+  &__overview {
+    height: 100%;
+  }
+
+  &__slider_label {
+    height: 5rem;
+  }
+}
+
+.ant-card-body {
+  display: flex;
+  justify-content: space-between;
+}

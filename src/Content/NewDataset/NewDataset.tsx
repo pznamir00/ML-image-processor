@@ -8,6 +8,7 @@ import {
 import { Steps } from "antd";
 import { Content } from "antd/es/layout/layout";
 import { Fragment, useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 import { datasetsActions } from "../../store/datasets/reducer";
 import { selectCurrentDataset } from "../../store/datasets/selectors";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
@@ -15,9 +16,9 @@ import { imagesActions } from "../../store/images/reducer";
 import { selectImages } from "../../store/images/selectors";
 import Annotate from "./Annotation/Annotation";
 import Augmentation from "./Augmentation/Augmentation";
-import Export from "./Export/Export";
 import Form from "./Form/Form";
 import styles from "./NewDataset.module.scss";
+import Overview from "./Overview/Overview";
 import {
   NewDatasetStepLabels,
   NewDatasetSteps,
@@ -29,6 +30,7 @@ export default function NewDataset() {
   const dispatch = useAppDispatch();
   const dataset = useAppSelector(selectCurrentDataset);
   const images = useAppSelector(selectImages);
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(imagesActions.clear());
@@ -36,8 +38,11 @@ export default function NewDataset() {
   }, [dispatch]);
 
   const goToNextStep = useCallback(() => {
+    if (step === NewDatasetSteps.OVERVIEW) {
+      return navigate("/datasets");
+    }
     setStep(step + 1);
-  }, [step]);
+  }, [step, navigate]);
 
   return (
     <Fragment>
@@ -60,7 +65,7 @@ export default function NewDataset() {
         />
         <Steps.Step
           icon={<ExportOutlined />}
-          title={NewDatasetStepLabels[NewDatasetSteps.EXPORT]}
+          title={NewDatasetStepLabels[NewDatasetSteps.OVERVIEW]}
         />
       </Steps>
       <Content className={styles.new_dataset__content}>
@@ -94,9 +99,9 @@ export default function NewDataset() {
                     images={images}
                   />
                 );
-              case NewDatasetSteps.EXPORT:
+              case NewDatasetSteps.OVERVIEW:
                 return (
-                  <Export
+                  <Overview
                     goToNextStep={goToNextStep}
                     dataset={dataset}
                     images={images}

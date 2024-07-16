@@ -7,11 +7,11 @@ export const getDistinctFiles = (images1: Image[], images2: Image[]) => {
   });
 };
 
-export const newFileToImage = (file: File): Image => ({
+export const newFileToImage = (file: File, datasetId: number): Image => ({
   name: file.name,
   url: null,
   isUploaded: false,
-  datasetId: -1,
+  datasetId,
   file,
 });
 

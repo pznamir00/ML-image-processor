@@ -1,3 +1,4 @@
+import { Augmentation } from "./augmentation.type";
 import { DatasetTypes } from "./dataset-types.enum";
 import { ClassificationImage, Image, ObjectDetectionImage } from "./image.type";
 
@@ -6,6 +7,7 @@ interface BaseDataset {
   name: string;
   type: DatasetTypes;
   images: Image[];
+  augmentations: Augmentation[];
 }
 
 export interface ClassificationDataset extends BaseDataset {

@@ -1,0 +1,8 @@
+.image {
+  filter: brightness(50%);
+  cursor: pointer;
+
+  &__active {
+    filter: unset;
+  }
+}

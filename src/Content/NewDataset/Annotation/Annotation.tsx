@@ -2,6 +2,7 @@ import { ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons";
 import { Button, Card, Modal, Progress, Spin } from "antd";
 import useNotification from "antd/es/notification/useNotification";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { datasetsActions } from "../../../store/datasets/reducer";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import {
   imagesActions,
@@ -73,6 +74,7 @@ export default function Annotation({
   const onPreviousItem = () => setCurrentImageIndex(currentImageIndex - 1);
 
   const onFinish = () => {
+    dispatch(datasetsActions.setImages(images));
     dispatch(updateBatchImages({ images })).then(goToNextStep);
   };
 

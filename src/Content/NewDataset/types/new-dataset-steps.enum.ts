@@ -3,7 +3,7 @@ export enum NewDatasetSteps {
   UPLOAD,
   ANNOTATION,
   AUGMENTATION,
-  EXPORT,
+  OVERVIEW,
 }
 
 export const NewDatasetStepLabels = {
@@ -11,5 +11,5 @@ export const NewDatasetStepLabels = {
   [NewDatasetSteps.UPLOAD]: "Upload",
   [NewDatasetSteps.ANNOTATION]: "Annotation",
   [NewDatasetSteps.AUGMENTATION]: "Augmentation",
-  [NewDatasetSteps.EXPORT]: "Export",
+  [NewDatasetSteps.OVERVIEW]: "Overview",
 };

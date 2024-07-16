@@ -1,5 +1,6 @@
 import useNotification from "antd/es/notification/useNotification";
 import { Fragment, useCallback, useEffect } from "react";
+import { datasetsActions } from "../../../store/datasets/reducer";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { imagesActions, uploadImage } from "../../../store/images/reducer";
 import {
@@ -36,11 +37,11 @@ export default function Upload({ goToNextStep, dataset, images }: StepProps) {
   const onFilesAdd = useCallback(
     (fileList: FileList) => {
       const files = Array.from(fileList);
-      let newImages = files.map(newFileToImage);
+      let newImages = files.map((file) => newFileToImage(file, dataset.id));
       newImages = getDistinctFiles(newImages, images);
       dispatch(imagesActions.set(newImages));
     },
-    [dispatch, images],
+    [dispatch, images, dataset],
   );
 
   const onFileDelete = useCallback(
@@ -61,6 +62,7 @@ export default function Upload({ goToNextStep, dataset, images }: StepProps) {
       }
     }
     dispatch(imagesActions.setLoading(false));
+    dispatch(datasetsActions.setImages(images));
   }, [images, dispatch, error, dataset]);
 
   return (
