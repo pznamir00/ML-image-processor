@@ -1,5 +1,6 @@
 import { DeleteOutlined } from "@ant-design/icons";
 import { Button, Card } from "antd";
+import { memo } from "react";
 import { UIAnnotation } from "../types/ui-annotation.type";
 import styles from "./BoxContent.module.scss";
 
@@ -30,4 +31,4 @@ function BoxContent({
   );
 }
 
-export default BoxContent;
+export default memo(BoxContent);

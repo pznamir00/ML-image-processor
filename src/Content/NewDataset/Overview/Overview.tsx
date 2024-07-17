@@ -3,6 +3,7 @@ import Card from "antd/es/card/Card";
 import { Content } from "antd/es/layout/layout";
 import useDatasetAllClassesExtractor from "../../../hooks/useDatasetAllClassesExtractor/useDatasetAllClassesExtractor";
 import { DatasetTypeLabels } from "../../../types/dataset-types.enum";
+import { getImageUrl } from "../../../utils/images.utils";
 import AugmentationsList from "../components/AugmentationsList/AugmentationsList";
 import { StepProps } from "../types/step-props.type";
 import styles from "./Overview.module.scss";
@@ -20,11 +21,7 @@ export default function Overview({ goToNextStep, dataset, images }: StepProps) {
           <p>{images.length} images</p>
         </Card>
         <Card className={styles.overview__tile}>
-          <Image
-            width={200}
-            height={200}
-            src={URL.createObjectURL(images[0].file as File)}
-          />
+          <Image width={200} height={200} src={getImageUrl(images[0])} />
         </Card>
         <Card className={styles.overview__tile}>
           <AugmentationsList augmentations={dataset.augmentations} />

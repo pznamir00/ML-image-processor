@@ -3,6 +3,10 @@ import { AutoComplete, Card, Form, Image } from "antd";
 import { memo, useEffect, useState } from "react";
 import useDistinctClasses from "../../../../hooks/useDistinctClasses/useDistinctClasses";
 import { ClassificationImage } from "../../../../types/image.type";
+import {
+  getClassesFromClassificationImage as getClassesFromImage,
+  getImageUrl,
+} from "../../../../utils/images.utils";
 import { LayerProps } from "../types/layer-props.type";
 import styles from "./ClassificationLayer.module.scss";
 
@@ -12,9 +16,7 @@ function ClassificationLayer({
   setMetadata,
 }: LayerProps<ClassificationImage>) {
   const [_class, setClass] = useState(currentImage.metadata?.class || "");
-  const allClasses = useDistinctClasses(images, (img) => [
-    img.metadata?.class || "",
-  ]);
+  const allClasses = useDistinctClasses(images, getClassesFromImage);
   const [updateMetadata] = useDebounce(
     (val: string) => setMetadata(val ? { class: val } : undefined),
     1000,
@@ -31,11 +33,7 @@ function ClassificationLayer({
 
   return (
     <Card className={styles.classification_layer}>
-      <Image
-        src={URL.createObjectURL(currentImage.file as File)}
-        width={300}
-        height={300}
-      />
+      <Image src={getImageUrl(currentImage)} width={300} height={300} />
       <Form className={styles.classification_layer__form}>
         <Form.Item label="Class">
           <AutoComplete

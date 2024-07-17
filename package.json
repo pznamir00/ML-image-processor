@@ -26,6 +26,7 @@
     "react-image-label": "^1.1.2",
     "react-picture-annotation": "^1.2.0",
     "react-redux": "^9.1.2",
+    "react-resolver": "^2.0.0",
     "react-router": "^6.24.1",
     "react-router-dom": "^6.24.1",
     "react-scripts": "5.0.1",

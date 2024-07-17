@@ -1,18 +1,17 @@
 import {
   CalculatorOutlined,
   EditOutlined,
-  ExportOutlined,
+  FileDoneOutlined,
   FormOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
 import { Steps } from "antd";
 import { Content } from "antd/es/layout/layout";
-import { Fragment, useCallback, useEffect, useState } from "react";
+import { Fragment, useCallback, useState } from "react";
 import { useNavigate } from "react-router";
-import { datasetsActions } from "../../store/datasets/reducer";
+import useStoreCleaningOnDestroy from "../../hooks/useStoreCleaningOnDestroy/useStoreCleaningOnDestroy";
 import { selectCurrentDataset } from "../../store/datasets/selectors";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { imagesActions } from "../../store/images/reducer";
+import { useAppSelector } from "../../store/hooks";
 import { selectImages } from "../../store/images/selectors";
 import Annotate from "./Annotation/Annotation";
 import Augmentation from "./Augmentation/Augmentation";
@@ -26,16 +25,11 @@ import {
 import Upload from "./Upload/Upload";
 
 export default function NewDataset() {
+  useStoreCleaningOnDestroy();
   const [step, setStep] = useState(NewDatasetSteps.FORM);
-  const dispatch = useAppDispatch();
   const dataset = useAppSelector(selectCurrentDataset);
   const images = useAppSelector(selectImages);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    dispatch(imagesActions.clear());
-    dispatch(datasetsActions.clear());
-  }, [dispatch]);
 
   const goToNextStep = useCallback(() => {
     if (step === NewDatasetSteps.OVERVIEW) {
@@ -46,28 +40,22 @@ export default function NewDataset() {
 
   return (
     <Fragment>
-      <Steps current={step - 1}>
-        <Steps.Step
-          icon={<FormOutlined />}
-          title={NewDatasetStepLabels[NewDatasetSteps.FORM]}
-        />
-        <Steps.Step
-          icon={<UploadOutlined />}
-          title={NewDatasetStepLabels[NewDatasetSteps.UPLOAD]}
-        />
-        <Steps.Step
-          icon={<EditOutlined />}
-          title={NewDatasetStepLabels[NewDatasetSteps.ANNOTATION]}
-        />
-        <Steps.Step
-          icon={<CalculatorOutlined />}
-          title={NewDatasetStepLabels[NewDatasetSteps.AUGMENTATION]}
-        />
-        <Steps.Step
-          icon={<ExportOutlined />}
-          title={NewDatasetStepLabels[NewDatasetSteps.OVERVIEW]}
-        />
-      </Steps>
+      <Steps
+        current={step - 1}
+        children={[
+          { step: NewDatasetSteps.FORM, icon: <FormOutlined /> },
+          { step: NewDatasetSteps.UPLOAD, icon: <UploadOutlined /> },
+          { step: NewDatasetSteps.ANNOTATION, icon: <EditOutlined /> },
+          { step: NewDatasetSteps.AUGMENTATION, icon: <CalculatorOutlined /> },
+          { step: NewDatasetSteps.OVERVIEW, icon: <FileDoneOutlined /> },
+        ].map(({ step, icon }, key) => (
+          <Steps.Step
+            key={key}
+            icon={icon}
+            title={NewDatasetStepLabels[step]}
+          />
+        ))}
+      />
       <Content className={styles.new_dataset__content}>
         {(() => {
           if (step === NewDatasetSteps.FORM) {

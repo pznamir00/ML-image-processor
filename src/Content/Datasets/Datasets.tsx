@@ -1,5 +1,6 @@
 import { Button, Spin, Table } from "antd";
 import { useEffect } from "react";
+import useStoreCleaningOnDestroy from "../../hooks/useStoreCleaningOnDestroy/useStoreCleaningOnDestroy";
 import useToastOnError from "../../hooks/useToastOnError/useToastOnError";
 import { exportDataset, getDatasets } from "../../store/datasets/reducer";
 import {
@@ -12,6 +13,7 @@ import { DatasetTypeLabels } from "../../types/dataset-types.enum";
 import { Dataset } from "../../types/dataset.type";
 
 export default function Datasets() {
+  useStoreCleaningOnDestroy();
   const dispatch = useAppDispatch();
   const datasets = useAppSelector(selectDatasets);
   const loading = useAppSelector(selectDatasetsLoading);

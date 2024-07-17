@@ -3,6 +3,10 @@ import { RectangleSelector } from "ehsaantech-react-image-annotation/lib/selecto
 import { memo, useCallback, useEffect, useState } from "react";
 import useDistinctClasses from "../../../../hooks/useDistinctClasses/useDistinctClasses";
 import { ObjectDetectionImage } from "../../../../types/image.type";
+import {
+  getClassesFromObjectDetectionImage as getClassesFromImage,
+  getImageUrl,
+} from "../../../../utils/images.utils";
 import { LayerProps } from "../types/layer-props.type";
 import BoxContent from "./BoxContent/BoxContent";
 import Editor from "./Editor/Editor";
@@ -21,10 +25,7 @@ function ObjectDetectionLayer({
   const [currentUIAnnotation, setCurrentUIAnnotation] = useState<
     Partial<UIAnnotation>
   >({});
-  const allClasses = useDistinctClasses(
-    images,
-    (img) => img.metadata?.annotations.map((ann) => ann.class) || [],
-  );
+  const allClasses = useDistinctClasses(images, getClassesFromImage);
 
   useEffect(() => {
     const mdAnnotations = currentImage.metadata?.annotations || [];
@@ -57,7 +58,7 @@ function ObjectDetectionLayer({
 
   return (
     <ImageAnnotation
-      src={URL.createObjectURL(currentImage.file as File)}
+      src={getImageUrl(currentImage)}
       style={{ width: 450, height: 450, margin: "auto" }}
       type={RectangleSelector.TYPE}
       annotations={uiAnnotations}

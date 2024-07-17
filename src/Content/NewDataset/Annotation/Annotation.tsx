@@ -1,6 +1,6 @@
 import { ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons";
 import { Button, Card, Modal, Progress, Spin } from "antd";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useDebugValue, useMemo, useState } from "react";
 import useToastOnError from "../../../hooks/useToastOnError/useToastOnError";
 import { datasetsActions } from "../../../store/datasets/reducer";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
@@ -34,20 +34,19 @@ export default function Annotation({
   const loading = useAppSelector(selectImagesLoading);
   const err = useAppSelector(selectImagesError);
   const notificationHolder = useToastOnError(err, "Failed to save annotations");
-  const image = useMemo(
-    () => images[currentImageIndex],
-    [currentImageIndex, images],
+  useDebugValue(currentImageIndex);
+  const annotatedImages = useMemo(
+    () => images.filter((img) => img.metadata),
+    [images],
   );
 
+  const image = images[currentImageIndex];
   const isLastPhoto = currentImageIndex + 1 === images.length;
 
   const setMetadata = useCallback(
     (metadata: Metadata | undefined) => {
       dispatch(
-        imagesActions.setMetadata({
-          image,
-          metadata: metadata || null,
-        }),
+        imagesActions.setMetadata({ image, metadata: metadata || null }),
       );
     },
     [dispatch, image],
@@ -61,7 +60,9 @@ export default function Annotation({
     }
   };
 
-  const onPreviousItem = () => setCurrentImageIndex(currentImageIndex - 1);
+  const onPreviousItem = () => {
+    setCurrentImageIndex(currentImageIndex - 1);
+  };
 
   const onFinish = () => {
     dispatch(datasetsActions.setImages(images));
@@ -81,10 +82,12 @@ export default function Annotation({
         </Button>,
         <div className={styles.annotation__stats}>
           <span>
-            {currentImageIndex + 1} / {images.length}
+            {annotatedImages.length} / {images.length}
           </span>
           <Progress
-            percent={+((currentImageIndex / images.length) * 100).toFixed(2)}
+            percent={
+              +((annotatedImages.length / images.length) * 100).toFixed(2)
+            }
             className={styles.annotation__stats__progress}
           />
         </div>,

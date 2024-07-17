@@ -3,6 +3,7 @@ import { Image as AntdImage, Button } from "antd";
 import { useRef } from "react";
 import useRefWidth from "../../../../hooks/useRefWidth/useRefWidth";
 import { Image } from "../../../../types/image.type";
+import { getImageUrl } from "../../../../utils/images.utils";
 import styles from "./UploadResult.module.scss";
 
 interface Props {
@@ -23,7 +24,7 @@ export default function UploadResult({ images, onDelete, uploading }: Props) {
             <AntdImage
               width={containerWidth / 5}
               height={containerWidth / 5}
-              src={URL.createObjectURL(image.file as File)}
+              src={getImageUrl(image)}
             />
             <Button
               className={styles.upload_result__item__remove}

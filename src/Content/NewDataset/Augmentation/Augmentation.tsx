@@ -1,4 +1,4 @@
-import { Button, Flex, Modal, Slider, Spin, Tooltip } from "antd";
+import { Button, Modal, Slider, Spin } from "antd";
 import Card from "antd/es/card/Card";
 import { Content } from "antd/es/layout/layout";
 import { useCallback, useState } from "react";
@@ -13,7 +13,7 @@ import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { Augmentation as IAugmentation } from "../../../types/augmentation.type";
 import AugmentationsList from "../components/AugmentationsList/AugmentationsList";
 import { StepProps } from "../types/step-props.type";
-import AlgorithmImage from "./AlgorithmImage/AlgorithmImage";
+import AlgorithmsGrid from "./AlgorithmsGrid/AlgorithmsGrid";
 import styles from "./Augmentation.module.scss";
 import {
   AugmentationAlgorithms as Algorithms,
@@ -89,25 +89,10 @@ export default function Augmentation({
           <div className={styles.augmentation__body}>
             <div className={styles.augmentation__column}>
               <Card>
-                <Flex wrap gap="small">
-                  {[
-                    Algorithms.RANDOM_ROTATION,
-                    Algorithms.GRAYSCALE,
-                    Algorithms.NOISE,
-                    Algorithms.CROP,
-                    Algorithms.BLUR,
-                  ].map((alg) => (
-                    <Tooltip title={AugmentationAlgorithmLabels[alg]}>
-                      <div>
-                        <AlgorithmImage
-                          alg={alg}
-                          isActive={alg === algorithm}
-                          onClick={onImageClick}
-                        />
-                      </div>
-                    </Tooltip>
-                  ))}
-                </Flex>
+                <AlgorithmsGrid
+                  algorithm={algorithm}
+                  onImageClick={onImageClick}
+                />
               </Card>
               <Card
                 actions={[

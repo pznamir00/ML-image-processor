@@ -31,12 +31,7 @@ export default function Form({
   }, [dataset, goToNextStep]);
 
   const submit = async () => {
-    dispatch(
-      createDataset({
-        ...form.getFieldsValue(),
-        images: [],
-      }),
-    );
+    dispatch(createDataset({ ...form.getFieldsValue(), images: [] }));
   };
 
   return (
