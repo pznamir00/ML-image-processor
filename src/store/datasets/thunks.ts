@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { Dataset } from "../../types/dataset.type";
+import { ExportFormats } from "../../types/export-formats.enum";
 import { http } from "../http-client";
 
 export const getDatasets = createAsyncThunk(
@@ -32,8 +33,10 @@ export const updateDataset = createAsyncThunk(
 
 export const exportDataset = createAsyncThunk(
   "datasets/exportDataset",
-  async (dataset: Dataset) => {
-    await http.post<{ dataset: Dataset }>("/datasets/export", { dataset });
+  async ({ dataset, type }: { dataset: Dataset; type: ExportFormats }) => {
+    await http.post<{ dataset: Dataset }>(`/datasets/export?format=${type}`, {
+      dataset,
+    });
     return dataset;
   },
 );

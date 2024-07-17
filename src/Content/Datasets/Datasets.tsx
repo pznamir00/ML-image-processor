@@ -1,4 +1,4 @@
-import { Button, Spin, Table } from "antd";
+import { Select, Spin, Table } from "antd";
 import { useEffect } from "react";
 import useStoreCleaningOnDestroy from "../../hooks/useStoreCleaningOnDestroy/useStoreCleaningOnDestroy";
 import useToastOnError from "../../hooks/useToastOnError/useToastOnError";
@@ -11,6 +11,11 @@ import {
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { DatasetTypeLabels } from "../../types/dataset-types.enum";
 import { Dataset } from "../../types/dataset.type";
+import {
+  ExportFormatLabels,
+  ExportFormats,
+} from "../../types/export-formats.enum";
+import styles from "./Datasets.module.scss";
 
 export default function Datasets() {
   useStoreCleaningOnDestroy();
@@ -24,8 +29,8 @@ export default function Datasets() {
     dispatch(datasetsActions.getDatasets());
   }, [dispatch]);
 
-  const onExport = (dataset: Dataset) => {
-    dispatch(datasetsActions.exportDataset(dataset));
+  const onExport = (dataset: Dataset, type: ExportFormats) => {
+    dispatch(datasetsActions.exportDataset({ dataset, type }));
   };
 
   return (
@@ -49,7 +54,21 @@ export default function Datasets() {
             type: DatasetTypeLabels[dataset.type],
             imagesNumber: dataset.images.length,
             withAugmentations: dataset.augmentations.length ? "Yes" : "No",
-            actions: <Button onClick={() => onExport(dataset)}>Export</Button>,
+            actions: (
+              <Select
+                onChange={(type) => onExport(dataset, type)}
+                placeholder="Export"
+                className={styles.datasets__export}
+              >
+                {Object.entries(ExportFormatLabels).map(
+                  ([value, label], key) => (
+                    <Select.Option value={value} key={key}>
+                      {label}
+                    </Select.Option>
+                  ),
+                )}
+              </Select>
+            ),
           }))}
         />
       )}
