@@ -2,7 +2,7 @@ import { Form as AntdForm, Button, Card, Input, Radio } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { useEffect } from "react";
 import useToastOnError from "../../../hooks/useToastOnError/useToastOnError";
-import { createDataset } from "../../../store/datasets/reducer";
+import { datasetsActions } from "../../../store/datasets/reducer";
 import {
   selectCurrentDataset,
   selectDatasetsError,
@@ -31,7 +31,9 @@ export default function Form({
   }, [dataset, goToNextStep]);
 
   const submit = async () => {
-    dispatch(createDataset({ ...form.getFieldsValue(), images: [] }));
+    dispatch(
+      datasetsActions.createDataset({ ...form.getFieldsValue(), images: [] }),
+    );
   };
 
   return (

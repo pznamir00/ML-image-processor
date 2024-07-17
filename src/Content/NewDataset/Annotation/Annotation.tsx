@@ -4,10 +4,7 @@ import { useCallback, useDebugValue, useMemo, useState } from "react";
 import useToastOnError from "../../../hooks/useToastOnError/useToastOnError";
 import { datasetsActions } from "../../../store/datasets/reducer";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import {
-  imagesActions,
-  updateBatchImages,
-} from "../../../store/images/reducer";
+import { imagesActions } from "../../../store/images/reducer";
 import {
   selectImagesError,
   selectImagesLoading,
@@ -66,7 +63,7 @@ export default function Annotation({
 
   const onFinish = () => {
     dispatch(datasetsActions.setImages(images));
-    dispatch(updateBatchImages({ images })).then(goToNextStep);
+    dispatch(imagesActions.updateBatchImages({ images })).then(goToNextStep);
   };
 
   return (

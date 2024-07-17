@@ -2,7 +2,7 @@ import { Button, Spin, Table } from "antd";
 import { useEffect } from "react";
 import useStoreCleaningOnDestroy from "../../hooks/useStoreCleaningOnDestroy/useStoreCleaningOnDestroy";
 import useToastOnError from "../../hooks/useToastOnError/useToastOnError";
-import { exportDataset, getDatasets } from "../../store/datasets/reducer";
+import { datasetsActions } from "../../store/datasets/reducer";
 import {
   selectDatasets,
   selectDatasetsError,
@@ -21,11 +21,11 @@ export default function Datasets() {
   const notificationHolder = useToastOnError(error, "Failed to load datasets");
 
   useEffect(() => {
-    dispatch(getDatasets());
+    dispatch(datasetsActions.getDatasets());
   }, [dispatch]);
 
   const onExport = (dataset: Dataset) => {
-    dispatch(exportDataset(dataset));
+    dispatch(datasetsActions.exportDataset(dataset));
   };
 
   return (

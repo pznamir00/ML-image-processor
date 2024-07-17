@@ -1,8 +1,4 @@
-import {
-  DatabaseOutlined,
-  HomeOutlined,
-  PlusCircleOutlined,
-} from "@ant-design/icons";
+import { DatabaseOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import { Menu } from "antd";
 import Sider from "antd/es/layout/Sider";
 import { ItemType, MenuItemType } from "antd/es/menu/interface";
@@ -14,11 +10,6 @@ export default function Sidebar() {
   const { pathname } = useLocation();
 
   const sidebarItems: ItemType<MenuItemType>[] = [
-    {
-      key: "/",
-      label: <Link to="/">Home</Link>,
-      icon: createElement(HomeOutlined),
-    },
     {
       key: "/datasets/add",
       label: <Link to="/datasets/add">New dataset</Link>,

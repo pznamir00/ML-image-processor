@@ -1,7 +1,7 @@
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
+import { createSlice } from "@reduxjs/toolkit";
 import { Image, Metadata } from "../../types/image.type";
+import { updateBatchImages, uploadImage } from "./thunks";
 
 export interface ImagesState {
   images: Image[];
@@ -14,24 +14,6 @@ const initialState: ImagesState = {
   loading: false,
   error: null,
 };
-
-export const uploadImage = createAsyncThunk(
-  "images/uploadImage",
-  async ({ image, datasetId }: { image: Image; datasetId: number }) => {
-    const result = await axios.post<{ image: Image }>(
-      "http://localhost:8000/images",
-      { image, datasetId },
-    );
-    return { ...result.data.image, file: image.file };
-  },
-);
-
-export const updateBatchImages = createAsyncThunk(
-  "images/updateBatchImages",
-  async ({ images }: { images: Image[] }) => {
-    return await axios.put("http://localhost:8000/images/batch", { images });
-  },
-);
 
 export const imagesSlice = createSlice({
   name: "images",
@@ -88,5 +70,10 @@ export const imagesSlice = createSlice({
       }),
 });
 
-export const imagesActions = imagesSlice.actions;
+export const imagesActions = {
+  ...imagesSlice.actions,
+  updateBatchImages,
+  uploadImage,
+};
+
 export default imagesSlice.reducer;

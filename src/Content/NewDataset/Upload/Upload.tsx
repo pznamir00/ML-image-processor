@@ -2,7 +2,7 @@ import { Fragment, useCallback } from "react";
 import useToastOnError from "../../../hooks/useToastOnError/useToastOnError";
 import { datasetsActions } from "../../../store/datasets/reducer";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { imagesActions, uploadImage } from "../../../store/images/reducer";
+import { imagesActions } from "../../../store/images/reducer";
 import {
   selectImagesError,
   selectImagesLoading,
@@ -48,7 +48,9 @@ export default function Upload({ goToNextStep, dataset, images }: StepProps) {
     dispatch(imagesActions.setLoading(true));
     for await (const image of images) {
       if (!error) {
-        await dispatch(uploadImage({ image, datasetId: dataset!.id }));
+        await dispatch(
+          imagesActions.uploadImage({ image, datasetId: dataset!.id }),
+        );
       }
     }
     dispatch(imagesActions.setLoading(false));

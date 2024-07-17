@@ -1,12 +1,17 @@
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
+import { createSlice } from "@reduxjs/toolkit";
 import { Dataset } from "../../types/dataset.type";
 import {
   ClassificationImage,
   Image,
   ObjectDetectionImage,
 } from "../../types/image.type";
+import {
+  createDataset,
+  exportDataset,
+  getDatasets,
+  updateDataset,
+} from "./thunks";
 
 export interface DatasetsState {
   datasets: Dataset[];
@@ -21,47 +26,6 @@ const initialState: DatasetsState = {
   loading: false,
   error: null,
 };
-
-export const getDatasets = createAsyncThunk(
-  "datasets/getDatasets",
-  async () => {
-    const response = await axios.get<Dataset[]>(
-      "http://localhost:8000/datasets",
-    );
-    return response.data;
-  },
-);
-
-export const createDataset = createAsyncThunk(
-  "datasets/createDataset",
-  async (dataset: Dataset) => {
-    await axios.post<{ dataset: Dataset }>("http://localhost:8000/datasets", {
-      dataset,
-    });
-    return dataset;
-  },
-);
-
-export const updateDataset = createAsyncThunk(
-  "datasets/updateDataset",
-  async (dataset: Dataset) => {
-    await axios.put<{ dataset: Dataset }>("http://localhost:8000/datasets", {
-      dataset,
-    });
-    return dataset;
-  },
-);
-
-export const exportDataset = createAsyncThunk(
-  "datasets/exportDataset",
-  async (dataset: Dataset) => {
-    await axios.post<{ dataset: Dataset }>(
-      "http://localhost:8000/datasets/export",
-      { dataset },
-    );
-    return dataset;
-  },
-);
 
 export const datasetsSlice = createSlice({
   name: "datasets",
@@ -145,5 +109,12 @@ export const datasetsSlice = createSlice({
       }),
 });
 
-export const datasetsActions = datasetsSlice.actions;
+export const datasetsActions = {
+  ...datasetsSlice.actions,
+  createDataset,
+  exportDataset,
+  getDatasets,
+  updateDataset,
+};
+
 export default datasetsSlice.reducer;

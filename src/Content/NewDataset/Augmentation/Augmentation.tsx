@@ -4,7 +4,7 @@ import { Content } from "antd/es/layout/layout";
 import { useCallback, useState } from "react";
 import useDatasetAllClassesExtractor from "../../../hooks/useDatasetAllClassesExtractor/useDatasetAllClassesExtractor";
 import useToastOnError from "../../../hooks/useToastOnError/useToastOnError";
-import { updateDataset } from "../../../store/datasets/reducer";
+import { datasetsActions } from "../../../store/datasets/reducer";
 import {
   selectDatasetsError,
   selectDatasetsLoading,
@@ -60,7 +60,9 @@ export default function Augmentation({
   };
 
   const onFinish = () => {
-    dispatch(updateDataset({ ...dataset, augmentations })).then(goToNextStep);
+    dispatch(datasetsActions.updateDataset({ ...dataset, augmentations })).then(
+      goToNextStep,
+    );
   };
 
   return (
