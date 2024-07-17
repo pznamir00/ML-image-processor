@@ -1,7 +1,13 @@
-import { MutableRefObject, useLayoutEffect, useState } from "react";
+import {
+  MutableRefObject,
+  useDebugValue,
+  useLayoutEffect,
+  useState,
+} from "react";
 
 export default function useRefWidth(ref: MutableRefObject<HTMLElement | null>) {
   const [width, setWidth] = useState(0);
+  useDebugValue(width);
 
   useLayoutEffect(() => {
     const update = () => setWidth(ref.current?.offsetWidth || 0);

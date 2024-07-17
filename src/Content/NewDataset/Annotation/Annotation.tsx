@@ -1,6 +1,6 @@
 import { ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons";
 import { Button, Card, Modal, Progress, Spin } from "antd";
-import { useCallback, useDebugValue, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import useToastOnError from "../../../hooks/useToastOnError/useToastOnError";
 import { datasetsActions } from "../../../store/datasets/reducer";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
@@ -31,7 +31,6 @@ export default function Annotation({
   const loading = useAppSelector(selectImagesLoading);
   const err = useAppSelector(selectImagesError);
   const notificationHolder = useToastOnError(err, "Failed to save annotations");
-  useDebugValue(currentImageIndex);
   const annotatedImages = useMemo(
     () => images.filter((img) => img.metadata),
     [images],

@@ -1,7 +1,7 @@
 import { Button, Modal, Slider, Spin } from "antd";
 import Card from "antd/es/card/Card";
 import { Content } from "antd/es/layout/layout";
-import { useCallback, useState } from "react";
+import { useContext, useState } from "react";
 import useDatasetAllClassesExtractor from "../../../hooks/useDatasetAllClassesExtractor/useDatasetAllClassesExtractor";
 import useToastOnError from "../../../hooks/useToastOnError/useToastOnError";
 import { datasetsActions } from "../../../store/datasets/reducer";
@@ -15,19 +15,15 @@ import AugmentationsList from "../components/AugmentationsList/AugmentationsList
 import { StepProps } from "../types/step-props.type";
 import AlgorithmsGrid from "./AlgorithmsGrid/AlgorithmsGrid";
 import styles from "./Augmentation.module.scss";
-import {
-  AugmentationAlgorithms as Algorithms,
-  AugmentationAlgorithmLabels,
-} from "./types/augmentation-algorithms.enum";
+import CurrentAlgorithmProvider, {
+  CurrentAlgorithmContext,
+} from "./CurrentAlgorithm/CurrentAlgorithm";
+import { AugmentationAlgorithmLabels } from "./types/augmentation-algorithms.enum";
 
-export default function Augmentation({
-  goToNextStep,
-  images,
-  dataset,
-}: StepProps) {
+function AugmentationContent({ goToNextStep, images, dataset }: StepProps) {
   const [isConfirmationBoxOpen, setIsConfirmationBoxOpen] = useState(false);
-  const [algorithm, setAlgorithm] = useState<Algorithms | null>(null);
   const [range, setRange] = useState<[number, number]>([0, 25]);
+  const context = useContext(CurrentAlgorithmContext);
   const [augmentations, setAugmentations] = useState<IAugmentation[]>([]);
   const dispatch = useAppDispatch();
   const loading = useAppSelector(selectDatasetsLoading);
@@ -35,28 +31,25 @@ export default function Augmentation({
   const allClassesNum = useDatasetAllClassesExtractor(dataset);
   const notificationHolder = useToastOnError(err, "Failed to save annotations");
 
-  const onImageClick = useCallback(
-    (alg: Algorithms) => setAlgorithm(alg === algorithm ? null : alg),
-    [setAlgorithm, algorithm],
-  );
-
   const addAugmentation = () => {
-    if (algorithm) {
+    if (context?.algorithm) {
       const newAugmentation: IAugmentation = {
-        algorithm,
+        algorithm: context.algorithm,
         fromPercentage: +(range[0] / 100).toFixed(2),
         toPercentage: +(range[1] / 100).toFixed(2),
       };
       setAugmentations([...augmentations, newAugmentation]);
-      setAlgorithm(null);
+      context.toggleAlgorithm(null);
       setRange([0, 25]);
     }
   };
 
   const onClear = () => {
-    setAugmentations([]);
-    setRange([0, 25]);
-    setAlgorithm(null);
+    if (context) {
+      setAugmentations([]);
+      setRange([0, 25]);
+      context.toggleAlgorithm(null);
+    }
   };
 
   const onFinish = () => {
@@ -91,21 +84,23 @@ export default function Augmentation({
           <div className={styles.augmentation__body}>
             <div className={styles.augmentation__column}>
               <Card>
-                <AlgorithmsGrid
-                  algorithm={algorithm}
-                  onImageClick={onImageClick}
-                />
+                <AlgorithmsGrid />
               </Card>
               <Card
                 actions={[
-                  <Button onClick={addAugmentation} disabled={!algorithm}>
+                  <Button
+                    onClick={addAugmentation}
+                    disabled={!context?.algorithm}
+                  >
                     Add
                   </Button>,
                 ]}
               >
                 <div className={styles.augmentation__slider_label}>
-                  {algorithm && (
-                    <span>{AugmentationAlgorithmLabels[algorithm]}</span>
+                  {context?.algorithm && (
+                    <span>
+                      {AugmentationAlgorithmLabels[context.algorithm]}
+                    </span>
                   )}
                 </div>
                 <Slider
@@ -131,5 +126,13 @@ export default function Augmentation({
         onCancel={() => setIsConfirmationBoxOpen(false)}
       ></Modal>
     </Content>
+  );
+}
+
+export default function Augmentation(props: any) {
+  return (
+    <CurrentAlgorithmProvider>
+      <AugmentationContent {...props} />
+    </CurrentAlgorithmProvider>
   );
 }

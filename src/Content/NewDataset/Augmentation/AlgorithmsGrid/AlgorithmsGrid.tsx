@@ -1,17 +1,11 @@
 import { Flex, Tooltip } from "antd";
-import AlgorithmImage from "../AlgorithmImage/AlgorithmImage";
 import {
   AugmentationAlgorithmLabels,
   AugmentationAlgorithms,
 } from "../types/augmentation-algorithms.enum";
+import AlgorithmImage from "./AlgorithmImage/AlgorithmImage";
 
-export default function AlgorithmsGrid({
-  algorithm,
-  onImageClick,
-}: {
-  algorithm: AugmentationAlgorithms | null;
-  onImageClick: (alg: AugmentationAlgorithms) => void;
-}) {
+export default function AlgorithmsGrid() {
   return (
     <Flex wrap gap="small">
       {[
@@ -23,11 +17,7 @@ export default function AlgorithmsGrid({
       ].map((alg, key) => (
         <Tooltip key={key} title={AugmentationAlgorithmLabels[alg]}>
           <div>
-            <AlgorithmImage
-              alg={alg}
-              isActive={alg === algorithm}
-              onClick={onImageClick}
-            />
+            <AlgorithmImage alg={alg} />
           </div>
         </Tooltip>
       ))}

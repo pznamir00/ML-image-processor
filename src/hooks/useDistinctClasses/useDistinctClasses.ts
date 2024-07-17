@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useDebugValue, useEffect, useState } from "react";
 import { Image } from "../../types/image.type";
 
 export default function useDistinctClasses<T extends Image>(
@@ -6,6 +6,7 @@ export default function useDistinctClasses<T extends Image>(
   getClassFromImage: (image: T) => string[],
 ) {
   const [classes, setClasses] = useState<string[]>([]);
+  useDebugValue(classes);
 
   useEffect(() => {
     const allClasses = images.map(getClassFromImage).flat();
