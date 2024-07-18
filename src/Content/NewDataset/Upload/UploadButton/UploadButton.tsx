@@ -15,7 +15,11 @@ export default function UploadButton({
       multiple
       types={["PNG", "JPG", "GIF", "JPEG"]}
     >
-      <Button className={styles.upload_button} type="dashed">
+      <Button
+        className={styles.upload_button}
+        type="dashed"
+        data-testid="upload-btn"
+      >
         <PlusOutlined className={styles.upload_button__icon} />
         <div className={styles.upload_button__text}>Upload</div>
       </Button>

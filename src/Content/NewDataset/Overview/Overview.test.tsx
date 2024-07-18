@@ -1,9 +1,9 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { DatasetTypes } from "../../../types/dataset-types.enum";
+import { datasetMock } from "../../../mocks/dataset.mock";
+import { imagesMock } from "../../../mocks/images.mock";
 import { Dataset } from "../../../types/dataset.type";
 import { Image } from "../../../types/image.type";
-import { AugmentationAlgorithms } from "../Augmentation/types/augmentation-algorithms.enum";
 import Overview from "./Overview";
 
 describe("Overview", () => {
@@ -51,45 +51,18 @@ function setup() {
   const goToNextStep = jest.fn();
 
   render(
-    <Overview images={images} dataset={dataset} goToNextStep={goToNextStep} />,
+    <Overview images={images} dataset={dataset} goToNextStep={goToNextStep} />
   );
 
   return { goToNextStep };
 }
 
 function getDataset(): Dataset {
-  return {
-    id: 5,
-    name: "dataset-1",
-    type: DatasetTypes.CLASSIFICATION,
-    images: [],
-    augmentations: [
-      {
-        fromPercentage: 0.1,
-        toPercentage: 0.4,
-        algorithm: AugmentationAlgorithms.CROP,
-      },
-    ],
-  };
+  return { ...datasetMock };
 }
 
 function getImages(): Image[] {
-  return [
-    {
-      name: "DSC000.JPG",
-      url: "https://some-url.com",
-      isUploaded: true,
-      datasetId: 5,
-      metadata: { class: "cls1" },
-    },
-    {
-      name: "DSC001.JPG",
-      url: "https://some-url.com",
-      isUploaded: true,
-      datasetId: 5,
-      metadata: { class: "cls1" },
-    },
-  ];
+  return [...imagesMock];
 }
 
 jest.mock("../../../utils/images.utils", () => ({

@@ -25,12 +25,14 @@ export default function UploadResult({ images, onDelete, uploading }: Props) {
               width={containerWidth / 5}
               height={containerWidth / 5}
               src={getImageUrl(image)}
+              data-testid="upload-result-image"
             />
             <Button
               className={styles.upload_result__item__remove}
               disabled={uploading}
               size="small"
               onClick={uploading ? undefined : () => onDelete(image)}
+              data-testid="upload-result-delete-btn"
             >
               <DeleteOutlined />
             </Button>
