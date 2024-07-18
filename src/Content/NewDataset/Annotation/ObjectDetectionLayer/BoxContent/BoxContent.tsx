@@ -23,6 +23,7 @@ function BoxContent({
       }}
       title={annotation.data.text}
       size="small"
+      data-testid="box-content"
     >
       <Button danger onClick={() => onDelete(annotation)}>
         <DeleteOutlined />

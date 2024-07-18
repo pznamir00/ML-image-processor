@@ -36,7 +36,7 @@ export default function Editor({
         top: `${geometry.y + geometry.height}%`,
       }}
     >
-      <Form.Item label="Class">
+      <Form.Item label="Class" data-testid="editor">
         <AutoComplete
           onChange={update}
           onSelect={update}

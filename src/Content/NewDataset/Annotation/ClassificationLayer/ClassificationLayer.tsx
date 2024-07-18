@@ -33,7 +33,12 @@ function ClassificationLayer({
 
   return (
     <Card className={styles.classification_layer}>
-      <Image src={getImageUrl(currentImage)} width={300} height={300} />
+      <Image
+        data-testid="classification-layer-image"
+        src={getImageUrl(currentImage)}
+        width={300}
+        height={300}
+      />
       <Form className={styles.classification_layer__form}>
         <Form.Item label="Class">
           <AutoComplete
