@@ -55,7 +55,7 @@ export default function Form({
             },
           ]}
         >
-          <Input />
+          <Input data-testid="name-input" />
         </AntdForm.Item>
 
         <AntdForm.Item
