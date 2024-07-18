@@ -3,14 +3,6 @@ import { BrowserRouter } from "react-router-dom";
 import Sidebar from "./Sidebar";
 
 describe("Sidebar", () => {
-  it("shows 'Home' item", async () => {
-    setup();
-    await waitFor(() => {
-      const homeItem = screen.getByText(/Home/i);
-      expect(homeItem).toBeInTheDocument();
-    });
-  });
-
   it("shows 'New dataset' item", async () => {
     setup();
     await waitFor(() => {

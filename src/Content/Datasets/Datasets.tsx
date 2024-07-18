@@ -48,7 +48,8 @@ export default function Datasets() {
             { title: "With augmentations", dataIndex: "withAugmentations" },
             { title: "", dataIndex: "actions" },
           ]}
-          dataSource={datasets.map((dataset) => ({
+          dataSource={datasets.map((dataset, key) => ({
+            key,
             id: dataset.id,
             name: dataset.name,
             type: DatasetTypeLabels[dataset.type],
@@ -58,6 +59,7 @@ export default function Datasets() {
               <Select
                 onChange={(type) => onExport(dataset, type)}
                 placeholder="Export"
+                data-testid="export-btn"
                 className={styles.datasets__export}
               >
                 {Object.entries(ExportFormatLabels).map(
