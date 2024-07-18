@@ -51,7 +51,7 @@ function setup() {
   const goToNextStep = jest.fn();
 
   render(
-    <Overview images={images} dataset={dataset} goToNextStep={goToNextStep} />
+    <Overview images={images} dataset={dataset} goToNextStep={goToNextStep} />,
   );
 
   return { goToNextStep };

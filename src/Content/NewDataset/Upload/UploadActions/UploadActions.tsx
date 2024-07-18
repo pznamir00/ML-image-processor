@@ -40,6 +40,7 @@ function UploadActions({
           type="primary"
           onClick={onStart}
           disabled={uploading || uploadedSuccessfully}
+          data-testid="upload-actions-upload-btn"
         >
           Upload
         </Button>

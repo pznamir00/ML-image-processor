@@ -7,7 +7,7 @@ import AlgorithmImage from "./AlgorithmImage/AlgorithmImage";
 
 export default function AlgorithmsGrid() {
   return (
-    <Flex wrap gap="small">
+    <Flex wrap gap="small" data-testid="alg-grid">
       {[
         AugmentationAlgorithms.RANDOM_ROTATION,
         AugmentationAlgorithms.GRAYSCALE,

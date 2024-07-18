@@ -37,7 +37,7 @@ describe("UploadActions", () => {
 function setup(
   progress = 0.45,
   uploading = false,
-  error: string | null = null
+  error: string | null = null,
 ) {
   const onClear = jest.fn();
   const onStart = jest.fn();
@@ -51,7 +51,7 @@ function setup(
       progress={progress}
       uploading={uploading}
       error={error}
-    />
+    />,
   );
 
   return { rerender, onClear, onStart, onFinish };

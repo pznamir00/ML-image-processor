@@ -27,7 +27,7 @@ function setup() {
   const images: any = [{ id: 1 }, { id: 2 }, { id: 3 }];
 
   render(
-    <UploadResult images={images} uploading={false} onDelete={onDelete} />
+    <UploadResult images={images} uploading={false} onDelete={onDelete} />,
   );
 
   return { onDelete };
