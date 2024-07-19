@@ -16,6 +16,7 @@
     "@uidotdev/usehooks": "^2.4.1",
     "antd": "^5.19.1",
     "axios": "^1.7.2",
+    "cypress": "^13.13.1",
     "ehsaantech-react-image-annotation": "^0.9.12",
     "eslint": "8.57",
     "prettier": "^3.2.5",
@@ -34,8 +35,13 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start:default": "react-scripts start",
+    "start": "npm run start:dev",
+    "start:dev": "env-cmd -f ./environments/.env.dev npm run start:default",
+    "start:prod": "env-cmd -f ./environments/.env.prod npm run start:default",
+    "start:e2e": "env-cmd -f ./environments/.env.e2e npm run start:default",
     "build": "set \"GENERATE_SOURCEMAP=true\" && react-scripts build",
+    "build:prod": "env-cmd -f .env.prod npm run-script build",
     "test": "react-scripts test --transformIgnorePatterns 'node_modules/(?!my-library-dir)/'",
     "eject": "react-scripts eject",
     "prepare": "husky",
@@ -61,6 +67,7 @@
     ]
   },
   "devDependencies": {
+    "env-cmd": "^10.1.0",
     "husky": "^9.0.11",
     "jest-fail-on-console": "^3.3.0",
     "jest-matchmedia-mock": "^1.1.0",
