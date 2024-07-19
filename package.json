@@ -39,7 +39,8 @@
     "test": "react-scripts test --transformIgnorePatterns 'node_modules/(?!my-library-dir)/'",
     "eject": "react-scripts eject",
     "prepare": "husky",
-    "check-formatting": "prettier '**/*.ts' '**/*.tsx' '**/*.scss' --no-error-on-unmatched-pattern --check && eslint --ext .ts,.tsx,.scss"
+    "check-formatting": "prettier '**/*.ts' '**/*.tsx' '**/*.scss' --no-error-on-unmatched-pattern --check && eslint --ext .ts,.tsx,.scss",
+    "check-duplicates": "jscpd --threshold 0.02 --format 'typescript,tsx,scss' ./src"
   },
   "eslintConfig": {
     "extends": [
@@ -63,6 +64,7 @@
     "husky": "^9.0.11",
     "jest-fail-on-console": "^3.3.0",
     "jest-matchmedia-mock": "^1.1.0",
+    "jscpd": "^4.0.5",
     "sass": "^1.77.8"
   }
 }
