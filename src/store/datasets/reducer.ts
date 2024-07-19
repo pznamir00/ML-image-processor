@@ -41,6 +41,10 @@ export const datasetsSlice = createSlice({
           | ObjectDetectionImage[];
       }
     },
+    finishCurrentDataset: (state) => {
+      state.datasets.push(state.currentDataset!);
+      state.currentDataset = null;
+    },
     clear: (state) => {
       state.datasets = [];
       state.currentDataset = null;

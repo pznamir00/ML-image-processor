@@ -16,6 +16,7 @@ export default function AlgorithmImage({
 
   return (
     <Image
+      data-testid={`algorithm-image-${alg}`}
       src={AugmentationAlgorithmImages[alg]}
       width={70}
       height={70}

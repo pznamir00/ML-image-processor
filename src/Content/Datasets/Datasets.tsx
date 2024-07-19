@@ -54,7 +54,7 @@ export default function Datasets() {
             name: dataset.name,
             type: DatasetTypeLabels[dataset.type],
             imagesNumber: dataset.images.length,
-            withAugmentations: dataset.augmentations.length ? "Yes" : "No",
+            withAugmentations: dataset.augmentations?.length ? "Yes" : "No",
             actions: (
               <Select
                 onChange={(type) => onExport(dataset, type)}

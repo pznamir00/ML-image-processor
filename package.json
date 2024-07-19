@@ -46,7 +46,9 @@
     "eject": "react-scripts eject",
     "prepare": "husky",
     "check-formatting": "prettier '**/*.ts' '**/*.tsx' '**/*.scss' --no-error-on-unmatched-pattern --check && eslint --ext .ts,.tsx,.scss",
-    "check-duplicates": "jscpd --threshold 0.02 --format 'typescript,tsx,scss' ./src"
+    "check-duplicates": "jscpd --threshold 0.02 --format 'typescript,tsx,scss' ./src",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run"
   },
   "eslintConfig": {
     "extends": [

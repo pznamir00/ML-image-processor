@@ -14,7 +14,7 @@ export default function Overview({ goToNextStep, dataset, images }: StepProps) {
   return (
     <Content>
       <Flex wrap gap="small">
-        <Card className={styles.overview__tile}>
+        <Card className={styles.overview__tile} data-testid="overview-details">
           <b>{dataset.name}</b>
           <p>{DatasetTypeLabels[dataset.type]}</p>
           <p>{classesCount} classes</p>
