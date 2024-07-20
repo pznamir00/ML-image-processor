@@ -1,0 +1,22 @@
+version: "0.1"
+
+services:
+  backend:
+    build: ./mocked-server
+    restart: always
+    volumes:
+      - .:/code/backend
+    ports:
+      - "8000:8000"
+    command: node app.js
+
+  frontend:
+    build: ..
+    restart: always
+    volumes:
+      - .:/code/frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    command: npm run start:e2e
