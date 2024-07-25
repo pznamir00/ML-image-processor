@@ -7,7 +7,13 @@ phases:
    
     commands:
         - npm install
-       
+  
+  pre_build:
+    commands:
+      - npm run test:unit -- --watchAll=false
+      - npm run check-formatting
+      - npm run check-duplicates
+
   build:
     commands:
         - npm run build:prod
@@ -15,6 +21,8 @@ phases:
 artifacts:
   files:
     - '**/*'
+  exclude-paths:
+    - src/**/*
   base-directory: 'build'
 
 cache:
