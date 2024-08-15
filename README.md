@@ -1,46 +1,78 @@
-# Getting Started with Create React App
+# Machine Learning Image Processor
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+The application that provides feature of uploading images for processing them to machine learning tasks like neural network training.
+It's splitted to following steps:
+- *form* - user fills out the form of new dataset
+- *upload* - user uploads images that are gonna be proceesed,
+- *annotation* - user annotates every image in order to add custom labels. An annotation type depends on dataset type and can be one of:
+  - classification (single class),
+  - object detection (multiple bounding boxes with their own classes)
+- *augmentation* - user sets augmentations steps for just created dataset. The application supports following augmentations:
+  - Random-rotation,
+  - Grayscale,
+  - Noise,
+  - Blur,
+  - Crop
+- *overview* - the point where user confirms all the settings of a dataset
+  
+Once the process is finish, a user can export specific dataset with one of predefined format that is one of followings:
+  - Yolov8,
+  - Coco,
+  - CreateML,
+  - Tensorflow-object-detection,
+  - Retinanet-keras
 
-## Available Scripts
+## Technology Stack
 
-In the project directory, you can run:
+- React
+- Antd
+- Redux
+- Typescript
+- JEST
+- Cypress
+- Eslint/Prettier
+- Husky
+- JSCPD
+- Docker
+- AWS (CI/CD)
+  - S3
+  - CodeBuild
+  - CodePipeline
 
-### `npm start`
+## How to run locally
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+In order to run the app locally, call the following commands:
+- install deps - `npm install`
+- run dev mode - `npm run start` or `npm run start:dev`
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Alternativly if you need, you can run the app in different environments
+- run prod mode - `npm run start:prod`
+- run e2e mode - `npm run start:e2e`
 
-### `npm test`
+## How to build
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+In order to build the app, run following command: `npm run build:dev`
 
-### `npm run build`
+Alternativly if you need, you can build the app in different environments
+- build prod mode - `npm run build:prod`
+- build e2e mode - `npm run build:e2e`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## How to test
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+You can test the app with following commands:
+- unit tests - `npm run test:unit`
+- e2e tests - `npm run test:e2e`
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### E2E Tests
 
-### `npm run eject`
+E2E tests are running inside Docker container, calling `npm run test:e2e` will build and run a docker containers from `cypress/docker-compose.yml` with mocked backend.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## CI/CD
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+The pipeline works in AWS CodeBuild/CodePipeline services and it's managed by `buildspec.yml` file, which triggers following commands
+- `npm run test:unit -- --watchAll=false` - runs unit tests
+- `npm run check-formatting` - checks formatting with eslint
+- `npm run check-duplicates` - checks code duplicates with jscpd
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+Then the pipeline builds production app with `npm run build:prod`.
+Built source is uploaded to AWS S3 and hosted out there.
